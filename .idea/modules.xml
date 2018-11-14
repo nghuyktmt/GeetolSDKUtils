@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/GeetolSDKUtils.iml" filepath="$PROJECT_DIR$/GeetolSDKUtils.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/geetolsdk/geetolsdk.iml" filepath="$PROJECT_DIR$/geetolsdk/geetolsdk.iml" />
     </modules>
   </component>
 </project>
