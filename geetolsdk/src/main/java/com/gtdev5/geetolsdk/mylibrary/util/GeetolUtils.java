@@ -176,8 +176,10 @@ public class GeetolUtils {
 
                 String contact = updateBean.getContract().toString();
                 String hpUrl = updateBean.getHpurl();
+                SpUtils.getInstance().putString("contact", contact);
+                SpUtils.getInstance().putString("hpUrl", hpUrl);
 
-                dataListener.onSuccess(adverts, goods, contact, hpUrl);
+                dataListener.onSuccess();
             }
 
             @Override
@@ -377,6 +379,14 @@ public class GeetolUtils {
             e.printStackTrace();
         }
         return goods;
+    }
+
+    public static String getContact() {
+        return SpUtils.getInstance().getString("contact", "");
+    }
+
+    public static String getHpUrl() {
+        return SpUtils.getInstance().getString("hpUrl", "");
     }
 
     public static Good getGoodByPid(int pid) {
