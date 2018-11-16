@@ -25,6 +25,8 @@ public class MainActivity extends AppCompatActivity {
                         Log.e("LogUtils", "getContact" + GeetolUtils.getContact());
                         Log.e("LogUtils", "getHpUrl" + GeetolUtils.getHpUrl());
                         Log.e("LogUtils", "getGoodByName" + GeetolUtils.getGoodByName("三个月"));
+
+                        GeetolUtils.getGoods().get(0).getPayWay();
                     }
 
                     @Override

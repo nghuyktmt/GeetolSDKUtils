@@ -477,6 +477,4 @@ public class GeetolUtils {
         }
         return 0;
     }
-
-
 }
