@@ -3,13 +3,13 @@ package com.gtdev5.geetolsdk.mylibrary.util;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.gtdev5.geetolsdk.mylibrary.beans.Ads;
@@ -19,14 +19,15 @@ import com.gtdev5.geetolsdk.mylibrary.beans.Gds;
 import com.gtdev5.geetolsdk.mylibrary.beans.GetNewBean;
 import com.gtdev5.geetolsdk.mylibrary.beans.Good;
 import com.gtdev5.geetolsdk.mylibrary.beans.OdResultBean;
-import com.gtdev5.geetolsdk.mylibrary.beans.PayBean;
 import com.gtdev5.geetolsdk.mylibrary.beans.ResultBean;
 import com.gtdev5.geetolsdk.mylibrary.beans.UpdateBean;
 import com.gtdev5.geetolsdk.mylibrary.callback.BaseCallback;
-import com.gtdev5.geetolsdk.mylibrary.callback.PayListener;
 import com.gtdev5.geetolsdk.mylibrary.callback.UpdateDataListener;
+import com.gtdev5.geetolsdk.mylibrary.callback.YuanliPayListener;
 import com.gtdev5.geetolsdk.mylibrary.http.HttpUtils;
 import com.gtdev5.geetolsdk.mylibrary.initialization.GeetolSDK;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,25 +48,33 @@ public class GeetolUtils {
     private static Activity mactivity;
     public static GeetolUtils geetolUtils;
     private static Gson gson;
-    public String appName = "测试";
+    private static IWXAPI msgapi;
 
 
-    public static GeetolUtils initSDK(Activity activity) {
+    public static void initSDK(Context context) {
+        GeetolSDK.init(context);
+        msgapi = WXAPIFactory.createWXAPI(context, CPResourceUtils.getString("wxId"));
+        msgapi.registerApp(CPResourceUtils.getString("wxId"));
+    }
+
+    public static GeetolUtils getSDK(Activity activity) {
         mactivity = activity;
-        GeetolSDK.init(activity);
         if (geetolUtils == null) {
             geetolUtils = new GeetolUtils();
         }
         return geetolUtils;
     }
 
-    public void startSDK(String appName, String channelName
+    public static IWXAPI getMsgApi() {
+        return msgapi;
+    }
+
+    public void startSDK(String channelName
             , UpdateDataListener dataListener) {
-        this.appName = appName;
         gson = new Gson();
         if (SpUtils.getInstance().getBoolean("isFirst", true)) {
             requestPermission(Manifest.permission.READ_PHONE_STATE);
-            channelStatistics(appName, channelName);
+            channelStatistics(CPResourceUtils.getString("yuanli_app_name"), channelName);
             SpUtils.getInstance().putBoolean("isFirst", false);
         }
         activateStatistics();
@@ -73,8 +82,50 @@ public class GeetolUtils {
         updateData(dataListener);
     }
 
+    public static void payOrder(int goodId, String payType, YuanliPayListener listener) {
+        payOrder(goodId, payType, "", listener);
+    }
 
-    public static void pay(int goodId, String payType, PayListener listener) {
+    public static void payOrder(int goodId, String payType, String phoneNum, YuanliPayListener listener) {
+        HashMap<String, String> yuanliMap = new HashMap<>();
+        String pay_type = "支付宝官方支付";
+        String price = "88.88";
+        String commodity = getGoodByPid(goodId).getName();
+        if ("wx".equals(payType)) {
+            pay_type = "微信官方支付";
+            price = getGoodByPid(goodId).getWxPrice();
+        }
+        if ("zfb".equals(payType)) {
+            pay_type = "支付宝官方支付";
+            price = getGoodByPid(goodId).getZfbPrice();
+        }
+        yuanliMap.put("user_phone", phoneNum);
+        yuanliMap.put("pay_type", pay_type);
+        yuanliMap.put("price", price);
+        yuanliMap.put("app_name", CPResourceUtils.getString("yuanli_app_name"));
+        yuanliMap.put("commodity", (commodity.contains("VIP")) ? "开通VIP" : commodity);
+        HttpUtils.doAsk("http://101.37.76.151:8045/CoolAlbumWeChatpay/PreOrder"
+                , Utils.getStringByMap(yuanliMap), new HttpUtils.HttpListener() {
+                    @Override
+                    public void success(String result) {
+                        String orderNum = "8888";
+                        try {
+                            JSONObject object = new JSONObject(result);
+                            orderNum = object.getString("Orderno");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        pay(goodId, orderNum, payType, listener);
+                    }
+
+                    @Override
+                    public void error(String result) {
+                        listener.onFail(8045, null);
+                    }
+                });
+    }
+
+    private static void pay(int goodId, String orderNum, String payType, YuanliPayListener listener) {
         if (payType.equals("wx")) {
             HttpUtils.getInstance().PostOdOrder(1, goodId, 0, 1
                     , new BaseCallback<OdResultBean>() {
@@ -85,20 +136,18 @@ public class GeetolUtils {
 
                         @Override
                         public void onFailure(Request request, Exception e) {
-                            ToastUtils.showShortToast("微信支付失败");
+                            listener.onFail(139, e);
                         }
 
                         @Override
                         public void onSuccess(Response response, OdResultBean odResultBean) {
-                            listener.onSuccess(new PayBean(odResultBean));
-                            ToastUtils.showShortToast("微信支付成功");
-
+                            PayUtils.getPay(mactivity).goPay(odResultBean, orderNum, listener);
                         }
 
 
                         @Override
                         public void onError(Response response, int errorCode, Exception e) {
-                            ToastUtils.showShortToast("微信支付失败");
+                            listener.onFail(errorCode, e);
                         }
                     });
         }
@@ -112,22 +161,18 @@ public class GeetolUtils {
 
                         @Override
                         public void onFailure(Request request, Exception e) {
-                            ToastUtils.showShortToast("支付宝支付成功");
-
+                            listener.onFail(165, e);
                         }
 
                         @Override
                         public void onSuccess(Response response, ApliyBean apliyBean) {
-                            listener.onSuccess(new PayBean(apliyBean));
-                            ToastUtils.showShortToast("支付宝支付成功");
-
+                            PayUtils.getPay(mactivity).goPay(apliyBean, orderNum, listener);
                         }
 
 
                         @Override
                         public void onError(Response response, int errorCode, Exception e) {
-                            ToastUtils.showShortToast("支付宝支付成功");
-
+                            listener.onFail(errorCode, e);
                         }
                     });
         }
@@ -143,6 +188,7 @@ public class GeetolUtils {
             @Override
             public void onFailure(Request request, Exception e) {
                 ToastUtils.showShortToast("数据更新失败");
+                dataListener.onFail(192,e);
             }
 
             @Override
@@ -226,7 +272,7 @@ public class GeetolUtils {
                 mactivity.getContentResolver(),
                 Settings.Secure.ANDROID_ID);
         HashMap<String, String> map = new HashMap<>();
-        map.put("appname", appName);
+        map.put("appname", CPResourceUtils.getString("yuanli_app_name"));
         map.put("Client_type", client_type);
         map.put("pid", pid);
         HttpUtils.getInstance().get("http://101.37.76.151:1013/API/Insert_Activation.aspx?"
@@ -243,8 +289,6 @@ public class GeetolUtils {
 
             @Override
             public void onSuccess(Response response, String s) {
-                Log.e("LogUtils", "激活统计成功   " + s);
-                ToastUtils.showShortToast("激活统计成功   " + s);
             }
 
 
@@ -274,9 +318,6 @@ public class GeetolUtils {
 
                     @Override
                     public void onSuccess(Response response, String s) {
-                        Log.e("LogUtils", "渠道统计成功   " + s);
-
-                        ToastUtils.showShortToast("渠道统计成功    " + s);
 
                     }
 
@@ -306,7 +347,6 @@ public class GeetolUtils {
 
                         @Override
                         public void onSuccess(Response response, ResultBean resultBean) {
-                            ToastUtils.showShortToast("注册成功    " + resultBean.toString());
                         }
 
                         @Override
@@ -333,7 +373,6 @@ public class GeetolUtils {
 
                         @Override
                         public void onSuccess(Response response, ResultBean resultBean) {
-                            ToastUtils.showShortToast("注册成功    " + resultBean.toString());
                         }
 
                         @Override
@@ -438,5 +477,6 @@ public class GeetolUtils {
         }
         return 0;
     }
+
 
 }
