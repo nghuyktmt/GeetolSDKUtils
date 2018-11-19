@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
         HashMap<String, String> remarkMap = new HashMap<>();
-        GeetolUtils.payOrder(GeetolUtils.getPidByGoodName("一个月VIP"), "zfb", "13888888888"
+        GeetolUtils.payOrder(GeetolUtils.getPidByGoodName("一个月VIP"), "wx", "13888888888"
                 , remarkMap, new YuanliPayListener() {
                     @Override
                     public void onSuccess() {
