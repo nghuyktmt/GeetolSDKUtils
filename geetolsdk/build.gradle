@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
-group='com.github.MoneyNotFoundException'
+group = 'com.github.MoneyNotFoundException'
 
 android {
     compileSdkVersion 26
@@ -9,12 +9,13 @@ android {
         minSdkVersion 15
         targetSdkVersion 26
         versionCode 6
-        versionName "abc"
+        versionName "1.2.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -38,10 +39,12 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:appcompat-v7:26.1.0'
-    implementation 'com.android.support:support-v4:26.1.0'
-    implementation 'com.android.support:support-fragment:26.1.0'
-    implementation 'com.android.support:support-core-ui:26.1.0'
+    //noinspection GradleCompatible
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    //noinspection GradleCompatible
+    implementation 'com.android.support:support-v4:27.1.1'    //noinspection GradleCompatible
+    implementation 'com.android.support:support-fragment:27.1.1'    //noinspection GradleCompatible
+    implementation 'com.android.support:support-core-ui:27.1.1'
     /* testImplementation 'junit:junit:4.12'
         androidTestImplementation 'com.android.support.test:runner:1.0.1'
         androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'*/
