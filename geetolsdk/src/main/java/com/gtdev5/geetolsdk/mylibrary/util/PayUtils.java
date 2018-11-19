@@ -3,7 +3,6 @@ package com.gtdev5.geetolsdk.mylibrary.util;
 import android.app.Activity;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 
 import com.alipay.sdk.app.PayTask;
 import com.google.gson.Gson;
@@ -27,6 +26,7 @@ public class PayUtils {
     private static PayUtils payUtils;
     private static Activity mActivity;
     private YuanliPayListener listener;
+    private HashMap<String, String> remarkMap = new HashMap<>();
     private String orderNum = "7777";
 
     public static PayUtils getPay(Activity activity) {
@@ -36,9 +36,10 @@ public class PayUtils {
         return payUtils;
     }
 
-    public void goPay(Object object, String orderNum, YuanliPayListener listener) {
+    public void goPay(Object object, String orderNum, HashMap<String, String> remarkMap, YuanliPayListener listener) {
         this.listener = listener;
         this.orderNum = orderNum;
+        this.remarkMap = remarkMap;
         if (object instanceof OdResultBean) {
             OdResultBean payBean = (OdResultBean) object;
             payWx(payBean);
@@ -90,6 +91,8 @@ public class PayUtils {
 
     public void synchroData() {
         HashMap<String, String> updataMap = new HashMap<>();
+        if (remarkMap != null && remarkMap.size() > 0)
+            updataMap.putAll(remarkMap);
         updataMap.put("order_no", orderNum);
         HttpUtils.doAsk("http://101.37.76.151:8045/CoolAlbumWeChatpay/updatestate"
                 , Utils.getStringByMap(updataMap), new HttpUtils.HttpListener() {
@@ -100,7 +103,7 @@ public class PayUtils {
 
                     @Override
                     public void error(String result) {
-                        listener.onFail(104,null);
+                        listener.onFail(104, null);
                     }
                 });
     }

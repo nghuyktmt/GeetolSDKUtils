@@ -100,8 +100,7 @@ public class GeetolUtils {
             pay_type = "支付宝官方支付";
             price = getGoodByPid(goodId).getZfbPrice();
         }
-        if (remarkMap != null)
-            yuanliMap.putAll(remarkMap);
+
         yuanliMap.put("user_phone", phoneNum);
         yuanliMap.put("pay_type", pay_type);
         yuanliMap.put("price", price);
@@ -118,7 +117,7 @@ public class GeetolUtils {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        pay(goodId, orderNum, payType, listener);
+                        pay(goodId, orderNum, payType, remarkMap, listener);
                     }
 
                     @Override
@@ -128,7 +127,7 @@ public class GeetolUtils {
                 });
     }
 
-    private static void pay(int goodId, String orderNum, String payType, YuanliPayListener listener) {
+    private static void pay(int goodId, String orderNum, String payType, HashMap<String, String> remarkMap, YuanliPayListener listener) {
         if (payType.equals("wx")) {
             HttpUtils.getInstance().PostOdOrder(1, goodId, 0, 1
                     , new BaseCallback<OdResultBean>() {
@@ -144,7 +143,7 @@ public class GeetolUtils {
 
                         @Override
                         public void onSuccess(Response response, OdResultBean odResultBean) {
-                            PayUtils.getPay(mactivity).goPay(odResultBean, orderNum, listener);
+                            PayUtils.getPay(mactivity).goPay(odResultBean, orderNum, remarkMap, listener);
                         }
 
 
@@ -169,7 +168,7 @@ public class GeetolUtils {
 
                         @Override
                         public void onSuccess(Response response, ApliyBean apliyBean) {
-                            PayUtils.getPay(mactivity).goPay(apliyBean, orderNum, listener);
+                            PayUtils.getPay(mactivity).goPay(apliyBean, orderNum, remarkMap, listener);
                         }
 
 
