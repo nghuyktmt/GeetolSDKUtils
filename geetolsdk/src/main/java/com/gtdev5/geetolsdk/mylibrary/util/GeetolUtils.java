@@ -83,11 +83,11 @@ public class GeetolUtils {
         updateData(dataListener);
     }
 
-    public static void payOrder(int goodId, String payType, YuanliPayListener listener) {
-        payOrder(goodId, payType, "", listener);
+    public static void payOrder(int goodId, String payType, HashMap<String, String> remarkMap, YuanliPayListener listener) {
+        payOrder(goodId, payType, "", remarkMap, listener);
     }
 
-    public static void payOrder(int goodId, String payType, String phoneNum, YuanliPayListener listener) {
+    public static void payOrder(int goodId, String payType, String phoneNum, HashMap<String, String> remarkMap, YuanliPayListener listener) {
         HashMap<String, String> yuanliMap = new HashMap<>();
         String pay_type = "支付宝官方支付";
         String price = "88.88";
@@ -100,6 +100,8 @@ public class GeetolUtils {
             pay_type = "支付宝官方支付";
             price = getGoodByPid(goodId).getZfbPrice();
         }
+        if (remarkMap != null)
+            yuanliMap.putAll(remarkMap);
         yuanliMap.put("user_phone", phoneNum);
         yuanliMap.put("pay_type", pay_type);
         yuanliMap.put("price", price);
@@ -218,7 +220,7 @@ public class GeetolUtils {
                 for (int i = 0; i < updateBean.getGds().size(); i++) {
                     Gds gds = updateBean.getGds().get(i);
                     goods.add(new Good(gds.getName(), gds.getPrice(), gds.getXwprice()
-                            , gds.getOriginal(), gds.getPayway(), gds.getGid(),gds.getRemark()));
+                            , gds.getOriginal(), gds.getPayway(), gds.getGid(), gds.getRemark()));
                 }
                 SpUtils.getInstance().putString("good", gson.toJson(goods));
 
