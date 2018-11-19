@@ -30,7 +30,7 @@
 
         <provider
             android:name="com.gtdev5.geetolsdk.mylibrary.widget.GeetolProvider"
-            android:authorities="com.GeetolSDK.FileProvider"
+            android:authorities="${applicationId}.Geetolprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
