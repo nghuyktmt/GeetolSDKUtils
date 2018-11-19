@@ -9,13 +9,12 @@ android {
         minSdkVersion 15
         targetSdkVersion 26
         versionCode 6
-        versionName "4.0.8"
+        versionName "abc"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
-            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }

@@ -48,17 +48,17 @@ public class MainActivity extends AppCompatActivity {
                         Log.e("LogUtils ", "wx  onFail");
                     }
                 });
-        GeetolUtils.payOrder(GeetolUtils.getPidByGoodName("三个月"), "wx", remarkMap
-                , new YuanliPayListener() {
-            @Override
-            public void onSuccess() {
-            }
-
-            @Override
-            public void onFail(int errCode, Exception e) {
-                Log.e("LogUtils ", "wx  onFail");
-            }
-        });
+//        GeetolUtils.payOrder(GeetolUtils.getPidByGoodName("三个月"), "wx", remarkMap
+//                , new YuanliPayListener() {
+//            @Override
+//            public void onSuccess() {
+//            }
+//
+//            @Override
+//            public void onFail(int errCode, Exception e) {
+//                Log.e("LogUtils ", "wx  onFail");
+//            }
+//        });
     }
 
     @Override
