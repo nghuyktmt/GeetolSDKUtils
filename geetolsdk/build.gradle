@@ -42,12 +42,14 @@ dependencies {
     //noinspection GradleCompatible
     implementation 'com.android.support:appcompat-v7:27.1.1'
     //noinspection GradleCompatible
-    implementation 'com.android.support:support-v4:27.1.1'    //noinspection GradleCompatible
-    implementation 'com.android.support:support-fragment:27.1.1'    //noinspection GradleCompatible
+    implementation 'com.android.support:support-v4:27.1.1'
+    //noinspection GradleCompatible
+    implementation 'com.android.support:support-fragment:27.1.1'
+    //noinspection GradleCompatible
     implementation 'com.android.support:support-core-ui:27.1.1'
     /* testImplementation 'junit:junit:4.12'
-        androidTestImplementation 'com.android.support.test:runner:1.0.1'
-        androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'*/
+            androidTestImplementation 'com.android.support.test:runner:1.0.1'
+            androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'*/
     compile 'com.squareup.okhttp3:okhttp:3.6.0'
     compile 'com.squareup.okio:okio:1.11.0'
     compile 'com.google.code.gson:gson:2.6.2'
@@ -55,6 +57,7 @@ dependencies {
     compile 'jp.wasabeef:glide-transformations:2.0.2'
     compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
     implementation files('libs/alipaySdk-20170922.jar')
-    implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
-
+    //    implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
+    implementation files('libs/libammsdk.jar')
+    implementation files('libs/wechat-sdk-android-with-mta-1.0.2.jar')
 }
