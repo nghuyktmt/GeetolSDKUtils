@@ -17,17 +17,20 @@ public class Good {
     private String payWay = "";
     //    商品ID（调用总部后台的支付时需要传）
     private int goodId;
+    //    备注
+    private String remark;
 
     public Good() {
     }
 
-    public Good(String name, String zfbPrice, String wxPrice, String original, String payWay, int goodId) {
+    public Good(String name, String zfbPrice, String wxPrice, String original, String payWay, int goodId,String remark) {
         this.name = name;
         this.zfbPrice = zfbPrice;
         this.wxPrice = wxPrice;
         this.original = original;
         this.payWay = payWay;
         this.goodId = goodId;
+        this.remark = remark;
     }
 
     public String getName() {
@@ -84,6 +87,13 @@ public class Good {
         this.goodId = goodId;
     }
 
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 
     @Override
     public String toString() {
@@ -94,6 +104,7 @@ public class Good {
                 ", original='" + original + '\'' +
                 ", payWay='" + getPayWay() + '\'' +
                 ", goodId=" + goodId +
+                ", remark='" + remark + '\'' +
                 '}';
     }
 }
