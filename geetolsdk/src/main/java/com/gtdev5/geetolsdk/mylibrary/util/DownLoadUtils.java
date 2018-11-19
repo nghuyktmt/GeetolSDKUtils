@@ -171,7 +171,7 @@ public class DownLoadUtils {
         Uri fileUri = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             fileUri = FileProvider.getUriForFile(mactivity.getApplication()
-                    , "com.GeetolSDK.FileProvider",
+                    , mactivity.getApplication().getPackageName()+".Geetolprovider",
                     apkFile);
         } else {
             fileUri = Uri.fromFile(apkFile);
