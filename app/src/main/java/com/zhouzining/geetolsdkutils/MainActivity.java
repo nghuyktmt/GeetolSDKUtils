@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.gtdev5.geetolsdk.mylibrary.callback.UpdateDataListener;
-import com.gtdev5.geetolsdk.mylibrary.callback.YuanliPayListener;
 import com.gtdev5.geetolsdk.mylibrary.util.GeetolUtils;
 
 public class MainActivity extends AppCompatActivity {
@@ -34,27 +33,27 @@ public class MainActivity extends AppCompatActivity {
                         Log.e("LogUtils ", "startSDK  onFail");
                     }
                 });
-        GeetolUtils.payOrder(GeetolUtils.getPidByGoodName("一个月VIP"), "zfb","13888888888"
-                , new YuanliPayListener() {
-            @Override
-            public void onSuccess() {
-            }
-
-            @Override
-            public void onFail(int errCode, Exception e) {
-                Log.e("LogUtils ", "wx  onFail");
-            }
-        });
-        GeetolUtils.payOrder(GeetolUtils.getPidByGoodName("三个月"), "wx", new YuanliPayListener() {
-            @Override
-            public void onSuccess() {
-            }
-
-            @Override
-            public void onFail(int errCode, Exception e) {
-                Log.e("LogUtils ", "wx  onFail");
-            }
-        });
+//        GeetolUtils.payOrder(GeetolUtils.getPidByGoodName("一个月VIP"), "zfb","13888888888"
+//                , new YuanliPayListener() {
+//            @Override
+//            public void onSuccess() {
+//            }
+//
+//            @Override
+//            public void onFail(int errCode, Exception e) {
+//                Log.e("LogUtils ", "wx  onFail");
+//            }
+//        });
+//        GeetolUtils.payOrder(GeetolUtils.getPidByGoodName("三个月"), "wx", new YuanliPayListener() {
+//            @Override
+//            public void onSuccess() {
+//            }
+//
+//            @Override
+//            public void onFail(int errCode, Exception e) {
+//                Log.e("LogUtils ", "wx  onFail");
+//            }
+//        });
     }
 
     @Override

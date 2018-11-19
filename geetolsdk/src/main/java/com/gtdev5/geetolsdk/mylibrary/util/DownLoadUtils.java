@@ -5,9 +5,11 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -20,10 +22,8 @@ import com.gtdev5.geetolsdk.mylibrary.beans.GetNewBean;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.net.URLConnection;
 
 /**
  * Created by Walter on 2018/11/13.
@@ -81,52 +81,53 @@ public class DownLoadUtils {
         new Thread(new Runnable() {
             @Override
             public void run() {
+
                 try {
-                    String sdPath = Environment.getExternalStorageDirectory() + "/";
-//                      文件保存路径
-                    String mSavePath = sdPath + "downloadApks";
-
-                    File dir = new File(mSavePath);
-                    if (!dir.exists()) {
-                        dir.mkdir();
-                    }
-                    Log.e("LogUtils", "mSavePath  " + mSavePath);
-
-                    // 下载文件
-                    HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
+                    //下载路径，如果路径无效了，可换成你的下载路径
+                    String path = Environment.getExternalStorageDirectory() + "/" + "downloadApks/";
+                    if (!new File(path).exists())
+                        new File(path).mkdirs();
+                    final long startTime = System.currentTimeMillis();
+                    //下载函数
+                    fileName = url.substring(url.lastIndexOf("/") + 1);
+                    //获取文件名
+                    URL myURL = new URL(url);
+                    URLConnection conn = myURL.openConnection();
                     conn.connect();
                     InputStream is = conn.getInputStream();
-                    int length = conn.getContentLength();
-
-                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日   HH:mm:ss");
-                    Date curDate = new Date(System.currentTimeMillis());
-                    fileName = formatter.format(curDate);
-
-                    File apkFile = new File(mSavePath, fileName);
-                    FileOutputStream fos = new FileOutputStream(apkFile);
-                    Log.e("LogUtils", "fileName  " + fileName);
-
-                    int count = 0;
-                    byte[] buffer = new byte[1024];
-                    int numread = is.read(buffer);
-                    count += numread;
-                    // 计算进度条的当前位置
-                    mProgress = (int) (((float) count / length) * 100);
-                    // 更新进度条
-                    mUpdateProgressHandler.sendEmptyMessage(1);
-                    Log.e("LogUtils", "numread  " + numread);
-
-                    // 下载完成
-                    if (numread < 0) {
-                        mUpdateProgressHandler.sendEmptyMessage(2);
+                    int fileSize = conn.getContentLength();//根据响应获取文件大小
+                    if (fileSize <= 0) throw new RuntimeException("无法获知文件大小 ");
+                    if (is == null) throw new RuntimeException("stream is null");
+                    File file1 = new File(path);
+                    if (!file1.exists()) {
+                        file1.mkdirs();
                     }
-                    fos.write(buffer, 0, numread);
-                    fos.close();
-                    is.close();
-                } catch (Exception e) {
-                    Log.e("LogUtils", "e  " + e);
+                    //把数据存入路径+文件名
+                    FileOutputStream fos = new FileOutputStream(path + "/" + fileName);
+                    byte buf[] = new byte[1024];
+                    int downLoadFileSize = 0;
+                    do {
+                        //循环读取
+                        int numread = is.read(buf);
+                        if (numread == -1) {
+                            break;
+                        }
+                        fos.write(buf, 0, numread);
+                        downLoadFileSize += numread;
+                        mProgress = (downLoadFileSize * 100) / fileSize;
+                        if (mProgress <= 100 && mProgress >= 0)
+                            mUpdateProgressHandler.sendEmptyMessage(1);
+                        Log.e("LogUtils", "mProgress  " + numread);
 
-                    e.printStackTrace();
+                    } while (true);
+                    // 下载完成
+                    mUpdateProgressHandler.sendEmptyMessage(2);
+                    Log.i("DOWNLOAD", "download success");
+                    Log.i("DOWNLOAD", "totalTime=" + (System.currentTimeMillis() - startTime));
+
+                    is.close();
+                } catch (Exception ex) {
+                    Log.e("DOWNLOAD", "error: " + ex.getMessage(), ex);
                 }
             }
         }).start();
@@ -166,9 +167,38 @@ public class DownLoadUtils {
         Intent intent = new Intent(Intent.ACTION_VIEW);
 //      安装完成后，启动app（源码中少了这句话）
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        Uri uri = Uri.parse("file://" + apkFile.toString());
-        intent.setDataAndType(uri, "application/vnd.android.package-archive");
-        mactivity.startActivity(intent);
+
+        Uri fileUri = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            fileUri = FileProvider.getUriForFile(mactivity.getApplication()
+                    , "com.GeetolSDK.FileProvider",
+                    apkFile);
+        } else {
+            fileUri = Uri.fromFile(apkFile);
+        }
+        Intent installIntent = new Intent(Intent.ACTION_VIEW);
+        installIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        installIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        installIntent.setAction(Intent.ACTION_VIEW);
+        installIntent.setDataAndType(fileUri,
+                "application/vnd.android.package-archive");
+        mactivity.startActivity(installIntent);
+
+
+//        Uri uri = null;
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+//            Uri contentUri = FileProvider.getUriForFile(mactivity
+//                    , mactivity.getApplicationContext().getPackageName() + ".FileProvider", apkFile);
+//            intent.setDataAndType(contentUri, "video/*");
+//        } else {
+//            uri = Uri.fromFile(apkFile);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            intent.setDataAndType(uri, "video/*");
+//        }
+//
+//        intent.setDataAndType(uri, "application/vnd.android.package-archive");
+//        mactivity.startActivity(intent);
     }
 
 }
