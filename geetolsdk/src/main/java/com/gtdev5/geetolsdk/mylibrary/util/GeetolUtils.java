@@ -10,7 +10,6 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.gtdev5.geetolsdk.mylibrary.beans.Ads;
@@ -81,6 +80,14 @@ public class GeetolUtils {
         activateStatistics();
         checkVersion();
         updateData(dataListener);
+    }
+
+    public static void payOrder(int goodId, String payType, YuanliPayListener listener) {
+        payOrder(goodId, payType, "", null, listener);
+    }
+
+    public static void payOrder(int goodId, String payType, String phoneNum, YuanliPayListener listener) {
+        payOrder(goodId, payType, phoneNum, null, listener);
     }
 
     public static void payOrder(int goodId, String payType, HashMap<String, String> remarkMap, YuanliPayListener listener) {
@@ -195,8 +202,6 @@ public class GeetolUtils {
 
             @Override
             public void onSuccess(Response response, UpdateBean updateBean) {
-                ToastUtils.showShortToast("数据更新成功");
-                Log.e("LogUtils", "updateBean  " + updateBean.toString());
                 Advert adverts = new Advert();
                 if (updateBean == null || updateBean.getAds() == null || updateBean.getGds() == null)
                     return;
@@ -253,7 +258,6 @@ public class GeetolUtils {
 
             @Override
             public void onSuccess(Response response, GetNewBean getNewBean) {
-                ToastUtils.showShortToast("新版本检测成功    " + getNewBean.toString());
                 if (getNewBean.isIssucc()) {
                     if (getNewBean.getVercode() > SystemUtils.getSystemVersionCode(mactivity)) {
                         DownLoadUtils.showDownLoadDialog(mactivity, getNewBean);

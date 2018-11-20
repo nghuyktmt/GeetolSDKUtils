@@ -26,9 +26,56 @@ public class MainActivity extends AppCompatActivity {
                         Log.e("LogUtils", "getBanner" + GeetolUtils.getBanner());
                         Log.e("LogUtils", "getContact" + GeetolUtils.getContact());
                         Log.e("LogUtils", "getHpUrl" + GeetolUtils.getHpUrl());
-                        Log.e("LogUtils", "getGoodByName" + GeetolUtils.getGoodByName("三个月"));
+                        Log.e("LogUtils", "getGoodByName" + GeetolUtils.getGoodByName("三个月VIP"));
 
-                        GeetolUtils.getGoods().get(0).getPayWay();
+
+                        HashMap<String, String> remarkMap = new HashMap<>();
+                        GeetolUtils.payOrder(GeetolUtils.getPidByGoodName("制作音乐相册")
+                                , "zfb", new YuanliPayListener() {
+                                    @Override
+                                    public void onSuccess() {
+                                    }
+
+                                    @Override
+                                    public void onFail(int errCode, Exception e) {
+                                        Log.e("LogUtils ", "wx  onFail");
+                                    }
+                                });
+                        GeetolUtils.payOrder(GeetolUtils.getPidByGoodName("制作音乐相册")
+                                , "zfb", remarkMap, new YuanliPayListener() {
+                                    @Override
+                                    public void onSuccess() {
+                                    }
+
+                                    @Override
+                                    public void onFail(int errCode, Exception e) {
+                                        Log.e("LogUtils ", "wx  onFail");
+                                    }
+                                });
+                        GeetolUtils.payOrder(GeetolUtils.getPidByGoodName("一个月VIP")
+                                , "zfb", "18573676330"
+                                , new YuanliPayListener() {
+                                    @Override
+                                    public void onSuccess() {
+                                    }
+
+                                    @Override
+                                    public void onFail(int errCode, Exception e) {
+                                        Log.e("LogUtils ", "wx  onFail");
+                                    }
+                                });
+                        GeetolUtils.payOrder(GeetolUtils.getPidByGoodName("一个月VIP")
+                                , "zfb", "18573676330"
+                                , remarkMap, new YuanliPayListener() {
+                                    @Override
+                                    public void onSuccess() {
+                                    }
+
+                                    @Override
+                                    public void onFail(int errCode, Exception e) {
+                                        Log.e("LogUtils ", "wx  onFail");
+                                    }
+                                });
                     }
 
                     @Override
@@ -36,18 +83,7 @@ public class MainActivity extends AppCompatActivity {
                         Log.e("LogUtils ", "startSDK  onFail");
                     }
                 });
-        HashMap<String, String> remarkMap = new HashMap<>();
-        GeetolUtils.payOrder(GeetolUtils.getPidByGoodName("一个月VIP"), "wx", "13888888888"
-                , remarkMap, new YuanliPayListener() {
-                    @Override
-                    public void onSuccess() {
-                    }
 
-                    @Override
-                    public void onFail(int errCode, Exception e) {
-                        Log.e("LogUtils ", "wx  onFail");
-                    }
-                });
 //        GeetolUtils.payOrder(GeetolUtils.getPidByGoodName("三个月"), "wx", remarkMap
 //                , new YuanliPayListener() {
 //            @Override
