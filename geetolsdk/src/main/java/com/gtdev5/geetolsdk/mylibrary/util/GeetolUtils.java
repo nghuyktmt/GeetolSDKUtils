@@ -15,6 +15,7 @@ import com.google.gson.Gson;
 import com.gtdev5.geetolsdk.mylibrary.beans.Ads;
 import com.gtdev5.geetolsdk.mylibrary.beans.Advert;
 import com.gtdev5.geetolsdk.mylibrary.beans.ApliyBean;
+import com.gtdev5.geetolsdk.mylibrary.beans.Contract;
 import com.gtdev5.geetolsdk.mylibrary.beans.Gds;
 import com.gtdev5.geetolsdk.mylibrary.beans.GetNewBean;
 import com.gtdev5.geetolsdk.mylibrary.beans.Good;
@@ -228,7 +229,7 @@ public class GeetolUtils {
                 }
                 SpUtils.getInstance().putString("good", gson.toJson(goods));
 
-                String contact = updateBean.getContract().toString();
+                String contact = gson.toJson(updateBean.getContract());
                 String hpUrl = updateBean.getHpurl();
                 SpUtils.getInstance().putString("contact", contact);
                 SpUtils.getInstance().putString("hpUrl", hpUrl);
@@ -427,8 +428,14 @@ public class GeetolUtils {
         return goods;
     }
 
-    public static String getContact() {
-        return SpUtils.getInstance().getString("contact", "");
+    public static Contract getContact() {
+        Contract contract = null;
+        try {
+            contract = gson.fromJson(SpUtils.getInstance().getString("contact", ""), Contract.class);
+        } catch (Exception e) {
+
+        }
+        return contract;
     }
 
     public static String getHpUrl() {
