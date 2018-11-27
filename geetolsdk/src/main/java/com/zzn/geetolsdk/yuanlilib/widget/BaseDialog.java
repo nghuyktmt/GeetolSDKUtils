@@ -10,7 +10,8 @@ import android.util.DisplayMetrics;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import com.zzn.geetolsdk.R;
+
+import com.yuanli.geetolsdk.R;
 
 /**
  * Created by cheng

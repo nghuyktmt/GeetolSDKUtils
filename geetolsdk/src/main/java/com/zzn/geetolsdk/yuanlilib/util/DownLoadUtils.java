@@ -16,7 +16,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
-import com.zzn.geetolsdk.R;
+import com.yuanli.geetolsdk.R;
 import com.zzn.geetolsdk.yuanlilib.beans.GetNewBean;
 
 import java.io.File;
