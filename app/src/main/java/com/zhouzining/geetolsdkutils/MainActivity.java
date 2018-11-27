@@ -5,9 +5,9 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import com.gtdev5.geetolsdk.mylibrary.callback.UpdateDataListener;
-import com.gtdev5.geetolsdk.mylibrary.callback.YuanliPayListener;
-import com.gtdev5.geetolsdk.mylibrary.util.GeetolUtils;
+import com.zzn.geetolsdk.yuanlilib.callback.UpdateDataListener;
+import com.zzn.geetolsdk.yuanlilib.callback.YuanliPayListener;
+import com.zzn.geetolsdk.yuanlilib.util.GeetolUtils;
 
 import java.util.HashMap;
 

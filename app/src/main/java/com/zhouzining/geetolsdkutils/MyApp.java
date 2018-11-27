@@ -2,7 +2,7 @@ package com.zhouzining.geetolsdkutils;
 
 import android.app.Application;
 
-import com.gtdev5.geetolsdk.mylibrary.util.GeetolUtils;
+import com.zzn.geetolsdk.yuanlilib.util.GeetolUtils;
 
 /**
  * Created by Walter on 2018/11/15.

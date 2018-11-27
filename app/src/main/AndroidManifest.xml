@@ -29,7 +29,7 @@
         </activity>
 
         <provider
-            android:name="com.gtdev5.geetolsdk.mylibrary.widget.GeetolProvider"
+            android:name="com.zzn.geetolsdk.yuanlilib.widget.GeetolProvider"
             android:authorities="${applicationId}.Geetolprovider"
             android:exported="false"
             android:grantUriPermissions="true">
