@@ -54,8 +54,14 @@ public class GeetolUtils {
 
     public static void initSDK(Context context) {
         GeetolSDK.init(context);
-        msgapi = WXAPIFactory.createWXAPI(context, CPResourceUtils.getString("wxId"));
-        msgapi.registerApp(CPResourceUtils.getString("wxId"));
+        try {
+            msgapi = WXAPIFactory.createWXAPI(context, CPResourceUtils.getString("wxId"));
+            msgapi.registerApp(CPResourceUtils.getString("wxId"));
+        } catch (Exception e) {
+            msgapi = WXAPIFactory.createWXAPI(context, "id不存在");
+            msgapi.registerApp("id不存在");
+        }
+
     }
 
     public static GeetolUtils getSDK(Activity activity) {
