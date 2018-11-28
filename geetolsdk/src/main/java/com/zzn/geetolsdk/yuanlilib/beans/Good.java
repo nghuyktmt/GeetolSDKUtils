@@ -20,10 +20,12 @@ public class Good {
     //    备注
     private String remark;
 
+    private String value;
+
     public Good() {
     }
 
-    public Good(String name, String zfbPrice, String wxPrice, String original, String payWay, int goodId,String remark) {
+    public Good(String name, String zfbPrice, String wxPrice, String original, String payWay, int goodId, String value, String remark) {
         this.name = name;
         this.zfbPrice = zfbPrice;
         this.wxPrice = wxPrice;
@@ -31,6 +33,7 @@ public class Good {
         this.payWay = payWay;
         this.goodId = goodId;
         this.remark = remark;
+        this.value = value;
     }
 
     public String getName() {
@@ -87,6 +90,14 @@ public class Good {
         this.goodId = goodId;
     }
 
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
     public String getRemark() {
         return remark;
     }
@@ -105,6 +116,7 @@ public class Good {
                 ", payWay='" + getPayWay() + '\'' +
                 ", goodId=" + goodId +
                 ", remark='" + remark + '\'' +
+                ", value='" + value + '\'' +
                 '}';
     }
 }

@@ -6,10 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.zzn.geetolsdk.yuanlilib.callback.UpdateDataListener;
-import com.zzn.geetolsdk.yuanlilib.callback.YuanliPayListener;
 import com.zzn.geetolsdk.yuanlilib.util.GeetolUtils;
-
-import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,53 +26,53 @@ public class MainActivity extends AppCompatActivity {
                         Log.e("LogUtils", "getGoodByName" + GeetolUtils.getGoodByName("三个月VIP"));
 
 
-                        HashMap<String, String> remarkMap = new HashMap<>();
-                        GeetolUtils.payOrder(GeetolUtils.getPidByGoodName("制作音乐相册")
-                                , "zfb", new YuanliPayListener() {
-                                    @Override
-                                    public void onSuccess() {
-                                    }
-
-                                    @Override
-                                    public void onFail(int errCode, Exception e) {
-                                        Log.e("LogUtils ", "wx  onFail");
-                                    }
-                                });
-                        GeetolUtils.payOrder(GeetolUtils.getPidByGoodName("制作音乐相册")
-                                , "zfb", remarkMap, new YuanliPayListener() {
-                                    @Override
-                                    public void onSuccess() {
-                                    }
-
-                                    @Override
-                                    public void onFail(int errCode, Exception e) {
-                                        Log.e("LogUtils ", "wx  onFail");
-                                    }
-                                });
-                        GeetolUtils.payOrder(GeetolUtils.getPidByGoodName("一个月VIP")
-                                , "zfb", "18573676330"
-                                , new YuanliPayListener() {
-                                    @Override
-                                    public void onSuccess() {
-                                    }
-
-                                    @Override
-                                    public void onFail(int errCode, Exception e) {
-                                        Log.e("LogUtils ", "wx  onFail");
-                                    }
-                                });
-                        GeetolUtils.payOrder(GeetolUtils.getPidByGoodName("一个月VIP")
-                                , "zfb", "18573676330"
-                                , remarkMap, new YuanliPayListener() {
-                                    @Override
-                                    public void onSuccess() {
-                                    }
-
-                                    @Override
-                                    public void onFail(int errCode, Exception e) {
-                                        Log.e("LogUtils ", "wx  onFail");
-                                    }
-                                });
+//                        HashMap<String, String> remarkMap = new HashMap<>();
+//                        GeetolUtils.payOrder(GeetolUtils.getPidByGoodName("制作音乐相册")
+//                                , "zfb", new YuanliPayListener() {
+//                                    @Override
+//                                    public void onSuccess() {
+//                                    }
+//
+//                                    @Override
+//                                    public void onFail(int errCode, Exception e) {
+//                                        Log.e("LogUtils ", "wx  onFail");
+//                                    }
+//                                });
+//                        GeetolUtils.payOrder(GeetolUtils.getPidByGoodName("制作音乐相册")
+//                                , "zfb", remarkMap, new YuanliPayListener() {
+//                                    @Override
+//                                    public void onSuccess() {
+//                                    }
+//
+//                                    @Override
+//                                    public void onFail(int errCode, Exception e) {
+//                                        Log.e("LogUtils ", "wx  onFail");
+//                                    }
+//                                });
+//                        GeetolUtils.payOrder(GeetolUtils.getPidByGoodName("一个月VIP")
+//                                , "zfb", "18573676330"
+//                                , new YuanliPayListener() {
+//                                    @Override
+//                                    public void onSuccess() {
+//                                    }
+//
+//                                    @Override
+//                                    public void onFail(int errCode, Exception e) {
+//                                        Log.e("LogUtils ", "wx  onFail");
+//                                    }
+//                                });
+//                        GeetolUtils.payOrder(GeetolUtils.getPidByGoodName("一个月VIP")
+//                                , "zfb", "18573676330"
+//                                , remarkMap, new YuanliPayListener() {
+//                                    @Override
+//                                    public void onSuccess() {
+//                                    }
+//
+//                                    @Override
+//                                    public void onFail(int errCode, Exception e) {
+//                                        Log.e("LogUtils ", "wx  onFail");
+//                                    }
+//                                });
                     }
 
                     @Override

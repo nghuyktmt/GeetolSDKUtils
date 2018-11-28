@@ -10,6 +10,7 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.zzn.geetolsdk.yuanlilib.beans.Ads;
@@ -210,6 +211,7 @@ public class GeetolUtils {
             @Override
             public void onSuccess(Response response, UpdateBean updateBean) {
                 Advert adverts = new Advert();
+                Log.e("onSuccess ", "updateBean  " + updateBean.toString());
                 if (updateBean == null || updateBean.getAds() == null || updateBean.getGds() == null)
                     return;
                 for (int i = 0; i < updateBean.getAds().size(); i++) {
@@ -231,7 +233,8 @@ public class GeetolUtils {
                 for (int i = 0; i < updateBean.getGds().size(); i++) {
                     Gds gds = updateBean.getGds().get(i);
                     goods.add(new Good(gds.getName(), gds.getPrice(), gds.getXwprice()
-                            , gds.getOriginal(), gds.getPayway(), gds.getGid(), gds.getRemark()));
+                            , gds.getOriginal(), gds.getPayway(), gds.getGid(), gds.getValue()
+                            , gds.getRemark()));
                 }
                 SpUtils.getInstance().putString("good", gson.toJson(goods));
 
