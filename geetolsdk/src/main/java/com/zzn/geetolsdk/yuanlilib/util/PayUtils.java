@@ -94,7 +94,11 @@ public class PayUtils {
         if (remarkMap != null && remarkMap.size() > 0)
             updataMap.putAll(remarkMap);
         updataMap.put("order_no", orderNum);
-        HttpUtils.doAsk("http://101.37.76.151:8045/CoolAlbumWeChatpay/updatestate"
+//        音乐相册电子相册，用的是这个接口同步，下次更新时更换接口
+//        HttpUtils.doAsk("http://101.37.76.151:8045/CoolAlbumWeChatpay/updatestate"
+
+//        其他的应用，用这个新接口
+        HttpUtils.doAsk("http://101.37.76.151:8045/NewOrder/updatestate"
                 , Utils.getStringByMap(updataMap), new HttpUtils.HttpListener() {
                     @Override
                     public void success(String result) {

@@ -121,7 +121,11 @@ public class GeetolUtils {
         yuanliMap.put("price", price);
         yuanliMap.put("app_name", CPResourceUtils.getString("yuanli_app_name"));
         yuanliMap.put("commodity", (commodity.contains("VIP")) ? "开通VIP" : commodity);
-        HttpUtils.doAsk("http://101.37.76.151:8045/CoolAlbumWeChatpay/PreOrder"
+//        音乐相册电子相册，用的是这个接口同步，下次更新时更换接口
+//        HttpUtils.doAsk("http://101.37.76.151:8045/CoolAlbumWeChatpay/PreOrder"
+
+//        其他的应用，用这个新接口
+        HttpUtils.doAsk("http://101.37.76.151:8045/NewOrder/PreOrder"
                 , Utils.getStringByMap(yuanliMap), new HttpUtils.HttpListener() {
                     @Override
                     public void success(String result) {
