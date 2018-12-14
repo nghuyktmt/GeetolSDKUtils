@@ -91,19 +91,20 @@ public class GeetolUtils {
     }
 
     public static void payOrderGeetol(int goodId, String payType, YuanliPayListener listener) {
-        payOrderGeetol(goodId, payType, "", null, listener);
+        payOrderGeetol(goodId, payType, "", null, null, listener);
     }
 
     public static void payOrderGeetol(int goodId, String payType, String phoneNum, YuanliPayListener listener) {
-        payOrderGeetol(goodId, payType, phoneNum, null, listener);
+        payOrderGeetol(goodId, payType, phoneNum, null, null, listener);
     }
 
-    public static void payOrderGeetol(int goodId, String payType, HashMap<String, String> remarkMap, YuanliPayListener listener) {
-        payOrderGeetol(goodId, payType, "", remarkMap, listener);
+    public static void payOrderGeetol(int goodId, String payType, HashMap<String, String> prepareRemarkMap
+            , HashMap<String, String> updateRemarkMap, YuanliPayListener listener) {
+        payOrderGeetol(goodId, payType, "", prepareRemarkMap, updateRemarkMap, listener);
     }
 
     public static void payOrderGeetol(int goodId, String payType, String phoneNum
-            , HashMap<String, String> remarkMap, YuanliPayListener listener) {
+            , HashMap<String, String> prepareRemarkMap, HashMap<String, String> updateRemarkMap, YuanliPayListener listener) {
         if (payType.equals("wx")) {
             HttpUtils.getInstance().PostOdOrderGeetol(1, goodId, 0, 1
                     , new BaseCallback<OdResultBean>() {
@@ -121,7 +122,8 @@ public class GeetolUtils {
                         public void onSuccess(Response response, OdResultBean odResultBean) {
                             Log.e("odResultBean   ", odResultBean.toString());
                             String orderNo = odResultBean.getNo();
-                            payGeetol(goodId, payType, orderNo, phoneNum, odResultBean, remarkMap, listener);
+                            payGeetol(goodId, payType, orderNo, phoneNum, odResultBean, prepareRemarkMap
+                                    , updateRemarkMap, listener);
 
                         }
 
@@ -151,7 +153,8 @@ public class GeetolUtils {
 
                             Log.e("apliyBean   ", apliyBean.toString());
 
-                            payGeetol(goodId, payType, orderNo, phoneNum, apliyBean, remarkMap, listener);
+                            payGeetol(goodId, payType, orderNo, phoneNum, apliyBean, prepareRemarkMap
+                                    , updateRemarkMap, listener);
 
                         }
 
@@ -166,22 +169,23 @@ public class GeetolUtils {
 
     public static void payOrderYuanli(String goodTitle, String payType, String price
             , YuanliPayListener listener) {
-        payOrderYuanli(goodTitle, payType, "", price, null, listener);
+        payOrderYuanli(goodTitle, payType, "", price, null, null, listener);
     }
 
-    public static void payOrderYuanli(String goodTitle, String payType, String price
-            , HashMap<String, String> remarkMap, YuanliPayListener listener) {
-        payOrderYuanli(goodTitle, payType, "", price, remarkMap, listener);
-    }
 
     public static void payOrderYuanli(String goodTitle, String payType, String phoneNum, String price
             , YuanliPayListener listener) {
-        payOrderYuanli(goodTitle, payType, phoneNum, price, null, listener);
+        payOrderYuanli(goodTitle, payType, phoneNum, price, null, null, listener);
+    }
+
+    public static void payOrderYuanli(String goodTitle, String payType, String price
+            , HashMap<String, String> prepearRemarkMap, HashMap<String, String> updateRemarkMap, YuanliPayListener listener) {
+        payOrderYuanli(goodTitle, payType, "", price, prepearRemarkMap, updateRemarkMap, listener);
     }
 
     public static void payOrderYuanli(String goodTitle, String payType, String phoneNum, String price
-            , HashMap<String, String> remarkMap, YuanliPayListener listener) {
-        String remark = remarkMap == null ? null : remarkMap.get("remark");
+            , HashMap<String, String> prepearRemarkMap, HashMap<String, String> updateRemarkMap, YuanliPayListener listener) {
+        String remark = prepearRemarkMap == null ? null : prepearRemarkMap.get("remark");
         if (payType.equals("wx")) {
             HttpUtils.getInstance().PostOdOrderYuanli(goodTitle, 1, price
                     , remark != null && !remark.equals("") ? "" : remark
@@ -201,7 +205,7 @@ public class GeetolUtils {
                             Log.e("odResultBean   ", odResultBean.toString());
                             String orderNo = odResultBean.getNo();
                             payYuanli(goodTitle, payType, orderNo, phoneNum, odResultBean
-                                    , price, remarkMap, listener);
+                                    , price, prepearRemarkMap, updateRemarkMap, listener);
 
                         }
 
@@ -232,7 +236,7 @@ public class GeetolUtils {
                             Log.e("apliyBean   ", apliyBean.toString());
 
                             payYuanli(goodTitle, payType, orderNo, phoneNum, apliyBean
-                                    , price, remarkMap, listener);
+                                    , price, prepearRemarkMap, updateRemarkMap, listener);
                         }
 
                         @Override
@@ -244,7 +248,8 @@ public class GeetolUtils {
     }
 
     private static void payYuanli(String goodTitle, String payType, String orderNum, String phoneNum
-            , Object obj, String price, HashMap<String, String> remarkMap, YuanliPayListener listener) {
+            , Object obj, String price, HashMap<String, String> prepearRemarkMap,
+                                  HashMap<String, String> updateRemarkMap, YuanliPayListener listener) {
 
         HashMap<String, String> yuanliMap = new HashMap<>();
         String pay_type = "支付宝官方支付";
@@ -264,11 +269,14 @@ public class GeetolUtils {
         yuanliMap.put("Client_Id", SystemUtils.getClientId(mactivity));
         yuanliMap.put("app_name", CPResourceUtils.getString("yuanli_app_name"));
         yuanliMap.put("commodity", (goodTitle.contains("VIP")) ? "开通VIP" : goodTitle);
+        if (prepearRemarkMap != null && prepearRemarkMap.size() > 0)
+            yuanliMap.putAll(prepearRemarkMap);
         HttpUtils.doAsk("http://101.37.76.151:8045/NewOrder/PreOrder"
                 , Utils.getStringByMap(yuanliMap), new HttpUtils.HttpListener() {
                     @Override
                     public void success(String result) {
-                        mactivity.runOnUiThread(() -> PayUtils.getPay(mactivity).goPay(obj, orderNum, remarkMap, listener));
+                        mactivity.runOnUiThread(() -> PayUtils.getPay(mactivity).goPay(obj, orderNum
+                                , updateRemarkMap, listener));
                     }
 
                     @Override
@@ -279,7 +287,7 @@ public class GeetolUtils {
     }
 
     private static void payGeetol(int goodId, String payType, String orderNum, String phoneNum
-            , Object obj, HashMap<String, String> remarkMap, YuanliPayListener listener) {
+            , Object obj, HashMap<String, String> prepearRemarkMap, HashMap<String, String> updateRemarkMap, YuanliPayListener listener) {
 
         HashMap<String, String> yuanliMap = new HashMap<>();
         String pay_type = "支付宝官方支付";
@@ -301,11 +309,18 @@ public class GeetolUtils {
         yuanliMap.put("order_no", orderNum);
         yuanliMap.put("app_name", CPResourceUtils.getString("yuanli_app_name"));
         yuanliMap.put("commodity", (commodity.contains("VIP")) ? "开通VIP" : commodity);
+        if (prepearRemarkMap != null && prepearRemarkMap.size() > 0)
+            yuanliMap.putAll(prepearRemarkMap);
+        Log.e("LogUtils", Utils.getStringByMap(yuanliMap));
         HttpUtils.doAsk("http://101.37.76.151:8045/NewOrder/PreOrder"
                 , Utils.getStringByMap(yuanliMap), new HttpUtils.HttpListener() {
                     @Override
                     public void success(String result) {
-                        mactivity.runOnUiThread(() -> PayUtils.getPay(mactivity).goPay(obj, orderNum, remarkMap, listener));
+                        Log.e("LogUtils", result);
+                        Log.e("LogUtils", (result == null) + "");
+
+                        mactivity.runOnUiThread(() -> PayUtils.getPay(mactivity)
+                                .goPay(obj, orderNum, updateRemarkMap, listener));
                     }
 
                     @Override

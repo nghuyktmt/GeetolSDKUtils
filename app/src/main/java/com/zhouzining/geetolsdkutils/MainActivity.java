@@ -29,7 +29,8 @@ public class MainActivity extends AppCompatActivity {
                         Log.e("LogUtils", "getGoodByName" + GeetolUtils.getGoodByName("三个月VIP"));
 
 
-                        HashMap<String, String> remarkMap = new HashMap<>();
+                        HashMap<String, String> prepearRemarkMap = new HashMap<>();
+                        HashMap<String, String> updateRemarkMap = new HashMap<>();
 //                        GeetolUtils.payOrder(GeetolUtils.getPidByGoodName("制作音乐相册")
 //                                , "zfb", new YuanliPayListener() {
 //                                    @Override
@@ -66,8 +67,8 @@ public class MainActivity extends AppCompatActivity {
 //                                });
 //
 
-                        GeetolUtils.payOrderGeetol(GeetolUtils.getPidByGoodName("制作音乐相册"),"zfb"
-                                ,"13888888888", new YuanliPayListener() {
+                        GeetolUtils.payOrderGeetol(GeetolUtils.getPidByGoodName("制作音乐相册"), "zfb"
+                                , "13555558888", new YuanliPayListener() {
                                     @Override
                                     public void onSuccess() {
 
@@ -92,18 +93,18 @@ public class MainActivity extends AppCompatActivity {
 //                                    }
 //                                });
 //
-//                        GeetolUtils.payOrderYuanli("制作音乐相册", "zfb"
-//                                , "8.8", remarkMap, new YuanliPayListener() {
-//                                    @Override
-//                                    public void onSuccess() {
-//
-//                                    }
-//
-//                                    @Override
-//                                    public void onFail(int errCode, Exception e) {
-//
-//                                    }
-//                                });
+                        GeetolUtils.payOrderYuanli("制作音乐相册", "zfb"
+                                , "8.8", prepearRemarkMap, updateRemarkMap, new YuanliPayListener() {
+                                    @Override
+                                    public void onSuccess() {
+
+                                    }
+
+                                    @Override
+                                    public void onFail(int errCode, Exception e) {
+
+                                    }
+                                });
 //
 //                        GeetolUtils.payOrderYuanli("一个月VIP", "zfb"
 //                                , "13888888888", "8.8"
