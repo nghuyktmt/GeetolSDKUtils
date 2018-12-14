@@ -44,7 +44,8 @@ public interface API {
     /**
      * 新的支付接口，包括微信和支付宝
      */
-    public static String ORDER_OD = "order.od";
+    public static String ORDER_OD = "yuanli.order";
+    public static String ORDER_OD_GEETOL = "order.od";
 
 
     /**

@@ -99,6 +99,15 @@ public class MapUtils {
         map.put("pway",String.valueOf(pway));
         return map;
     }
+    public static Map<String,String> getOrderYuanli(String goodTitle,int pway,String price,String remark){
+        Map<String,String> map = new HashMap<>();
+        map.putAll(getCurrencyMap());
+        map.put("title",String.valueOf(goodTitle));
+        map.put("pway",String.valueOf(pway));
+        map.put("remark",String.valueOf(remark));
+        map.put("price",String.valueOf(price));
+        return map;
+    }
 
     /**
      * @param title      标题  不能为空

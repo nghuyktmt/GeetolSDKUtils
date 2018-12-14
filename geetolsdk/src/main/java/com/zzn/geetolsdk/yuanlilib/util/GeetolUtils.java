@@ -13,6 +13,8 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.zzn.geetolsdk.yuanlilib.beans.Ads;
 import com.zzn.geetolsdk.yuanlilib.beans.Advert;
 import com.zzn.geetolsdk.yuanlilib.beans.ApliyBean;
@@ -28,8 +30,6 @@ import com.zzn.geetolsdk.yuanlilib.callback.UpdateDataListener;
 import com.zzn.geetolsdk.yuanlilib.callback.YuanliPayListener;
 import com.zzn.geetolsdk.yuanlilib.http.HttpUtils;
 import com.zzn.geetolsdk.yuanlilib.initialization.GeetolSDK;
-import com.tencent.mm.opensdk.openapi.IWXAPI;
-import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -90,19 +90,197 @@ public class GeetolUtils {
         updateData(dataListener);
     }
 
-    public static void payOrder(int goodId, String payType, YuanliPayListener listener) {
-        payOrder(goodId, payType, "", null, listener);
+    public static void payOrderGeetol(int goodId, String payType, YuanliPayListener listener) {
+        payOrderGeetol(goodId, payType, "", null, listener);
     }
 
-    public static void payOrder(int goodId, String payType, String phoneNum, YuanliPayListener listener) {
-        payOrder(goodId, payType, phoneNum, null, listener);
+    public static void payOrderGeetol(int goodId, String payType, String phoneNum, YuanliPayListener listener) {
+        payOrderGeetol(goodId, payType, phoneNum, null, listener);
     }
 
-    public static void payOrder(int goodId, String payType, HashMap<String, String> remarkMap, YuanliPayListener listener) {
-        payOrder(goodId, payType, "", remarkMap, listener);
+    public static void payOrderGeetol(int goodId, String payType, HashMap<String, String> remarkMap, YuanliPayListener listener) {
+        payOrderGeetol(goodId, payType, "", remarkMap, listener);
     }
 
-    public static void payOrder(int goodId, String payType, String phoneNum, HashMap<String, String> remarkMap, YuanliPayListener listener) {
+    public static void payOrderGeetol(int goodId, String payType, String phoneNum
+            , HashMap<String, String> remarkMap, YuanliPayListener listener) {
+        if (payType.equals("wx")) {
+            HttpUtils.getInstance().PostOdOrderGeetol(1, goodId, 0, 1
+                    , new BaseCallback<OdResultBean>() {
+                        @Override
+                        public void onRequestBefore() {
+
+                        }
+
+                        @Override
+                        public void onFailure(Request request, Exception e) {
+                            listener.onFail(139, e);
+                        }
+
+                        @Override
+                        public void onSuccess(Response response, OdResultBean odResultBean) {
+                            Log.e("odResultBean   ", odResultBean.toString());
+                            String orderNo = odResultBean.getNo();
+                            payGeetol(goodId, payType, orderNo, phoneNum, odResultBean, remarkMap, listener);
+
+                        }
+
+
+                        @Override
+                        public void onError(Response response, int errorCode, Exception e) {
+                            listener.onFail(errorCode, e);
+                        }
+                    });
+        }
+        if (payType.equals("zfb")) {
+            HttpUtils.getInstance().PostOdOrderGeetol(1, goodId, 0, 2
+                    , new BaseCallback<ApliyBean>() {
+                        @Override
+                        public void onRequestBefore() {
+
+                        }
+
+                        @Override
+                        public void onFailure(Request request, Exception e) {
+                            listener.onFail(165, e);
+                        }
+
+                        @Override
+                        public void onSuccess(Response response, ApliyBean apliyBean) {
+                            String orderNo = apliyBean.getOrder_no();
+
+                            Log.e("apliyBean   ", apliyBean.toString());
+
+                            payGeetol(goodId, payType, orderNo, phoneNum, apliyBean, remarkMap, listener);
+
+                        }
+
+
+                        @Override
+                        public void onError(Response response, int errorCode, Exception e) {
+                            listener.onFail(errorCode, e);
+                        }
+                    });
+        }
+    }
+
+    public static void payOrderYuanli(String goodTitle, String payType, String price
+            , YuanliPayListener listener) {
+        payOrderYuanli(goodTitle, payType, "", price, null, listener);
+    }
+
+    public static void payOrderYuanli(String goodTitle, String payType, String price
+            , HashMap<String, String> remarkMap, YuanliPayListener listener) {
+        payOrderYuanli(goodTitle, payType, "", price, remarkMap, listener);
+    }
+
+    public static void payOrderYuanli(String goodTitle, String payType, String phoneNum, String price
+            , YuanliPayListener listener) {
+        payOrderYuanli(goodTitle, payType, phoneNum, price, null, listener);
+    }
+
+    public static void payOrderYuanli(String goodTitle, String payType, String phoneNum, String price
+            , HashMap<String, String> remarkMap, YuanliPayListener listener) {
+        String remark = remarkMap == null ? null : remarkMap.get("remark");
+        if (payType.equals("wx")) {
+            HttpUtils.getInstance().PostOdOrderYuanli(goodTitle, 1, price
+                    , remark != null && !remark.equals("") ? "" : remark
+                    , new BaseCallback<OdResultBean>() {
+                        @Override
+                        public void onRequestBefore() {
+
+                        }
+
+                        @Override
+                        public void onFailure(Request request, Exception e) {
+                            listener.onFail(139, e);
+                        }
+
+                        @Override
+                        public void onSuccess(Response response, OdResultBean odResultBean) {
+                            Log.e("odResultBean   ", odResultBean.toString());
+                            String orderNo = odResultBean.getNo();
+                            payYuanli(goodTitle, payType, orderNo, phoneNum, odResultBean
+                                    , price, remarkMap, listener);
+
+                        }
+
+
+                        @Override
+                        public void onError(Response response, int errorCode, Exception e) {
+                            listener.onFail(errorCode, e);
+                        }
+                    });
+        }
+        if (payType.equals("zfb")) {
+            HttpUtils.getInstance().PostOdOrderYuanli(goodTitle, 2, price
+                    , remark != null && !remark.equals("") ? "" : remark
+                    , new BaseCallback<ApliyBean>() {
+                        @Override
+                        public void onRequestBefore() {
+
+                        }
+
+                        @Override
+                        public void onFailure(Request request, Exception e) {
+                            listener.onFail(165, e);
+                        }
+
+                        @Override
+                        public void onSuccess(Response response, ApliyBean apliyBean) {
+                            String orderNo = apliyBean.getNo();
+                            Log.e("apliyBean   ", apliyBean.toString());
+
+                            payYuanli(goodTitle, payType, orderNo, phoneNum, apliyBean
+                                    , price, remarkMap, listener);
+                        }
+
+                        @Override
+                        public void onError(Response response, int errorCode, Exception e) {
+                            listener.onFail(errorCode, e);
+                        }
+                    });
+        }
+    }
+
+    private static void payYuanli(String goodTitle, String payType, String orderNum, String phoneNum
+            , Object obj, String price, HashMap<String, String> remarkMap, YuanliPayListener listener) {
+
+        HashMap<String, String> yuanliMap = new HashMap<>();
+        String pay_type = "支付宝官方支付";
+        if ("wx".equals(payType)) {
+            pay_type = "微信官方支付";
+        }
+        if ("zfb".equals(payType)) {
+            pay_type = "支付宝官方支付";
+        }
+
+
+        yuanliMap.put("user_phone", phoneNum);
+        yuanliMap.put("pay_type", pay_type);
+        yuanliMap.put("price", price);
+        yuanliMap.put("Version", CPResourceUtils.getString("version"));
+        yuanliMap.put("order_no", orderNum);
+        yuanliMap.put("Client_Id", SystemUtils.getClientId(mactivity));
+        yuanliMap.put("app_name", CPResourceUtils.getString("yuanli_app_name"));
+        yuanliMap.put("commodity", (goodTitle.contains("VIP")) ? "开通VIP" : goodTitle);
+        HttpUtils.doAsk("http://101.37.76.151:8045/NewOrder/PreOrder"
+                , Utils.getStringByMap(yuanliMap), new HttpUtils.HttpListener() {
+                    @Override
+                    public void success(String result) {
+                        mactivity.runOnUiThread(() -> PayUtils.getPay(mactivity).goPay(obj, orderNum, remarkMap, listener));
+                    }
+
+                    @Override
+                    public void error(String result) {
+                        listener.onFail(8045, null);
+                    }
+                });
+    }
+
+    private static void payGeetol(int goodId, String payType, String orderNum, String phoneNum
+            , Object obj, HashMap<String, String> remarkMap, YuanliPayListener listener) {
+
         HashMap<String, String> yuanliMap = new HashMap<>();
         String pay_type = "支付宝官方支付";
         String price = "88.88";
@@ -119,24 +297,15 @@ public class GeetolUtils {
         yuanliMap.put("user_phone", phoneNum);
         yuanliMap.put("pay_type", pay_type);
         yuanliMap.put("price", price);
+        yuanliMap.put("Version", CPResourceUtils.getString("version"));
+        yuanliMap.put("order_no", orderNum);
         yuanliMap.put("app_name", CPResourceUtils.getString("yuanli_app_name"));
         yuanliMap.put("commodity", (commodity.contains("VIP")) ? "开通VIP" : commodity);
-//        音乐相册电子相册，用的是这个接口同步，下次更新时更换接口
-//        HttpUtils.doAsk("http://101.37.76.151:8045/CoolAlbumWeChatpay/PreOrder"
-
-//        其他的应用，用这个新接口
         HttpUtils.doAsk("http://101.37.76.151:8045/NewOrder/PreOrder"
                 , Utils.getStringByMap(yuanliMap), new HttpUtils.HttpListener() {
                     @Override
                     public void success(String result) {
-                        String orderNum = "8888";
-                        try {
-                            JSONObject object = new JSONObject(result);
-                            orderNum = object.getString("Orderno");
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        pay(goodId, orderNum, payType, remarkMap, listener);
+                        mactivity.runOnUiThread(() -> PayUtils.getPay(mactivity).goPay(obj, orderNum, remarkMap, listener));
                     }
 
                     @Override
@@ -144,59 +313,6 @@ public class GeetolUtils {
                         listener.onFail(8045, null);
                     }
                 });
-    }
-
-    private static void pay(int goodId, String orderNum, String payType, HashMap<String, String> remarkMap, YuanliPayListener listener) {
-        if (payType.equals("wx")) {
-            HttpUtils.getInstance().PostOdOrder(1, goodId, 0, 1
-                    , new BaseCallback<OdResultBean>() {
-                        @Override
-                        public void onRequestBefore() {
-
-                        }
-
-                        @Override
-                        public void onFailure(Request request, Exception e) {
-                            listener.onFail(139, e);
-                        }
-
-                        @Override
-                        public void onSuccess(Response response, OdResultBean odResultBean) {
-                            PayUtils.getPay(mactivity).goPay(odResultBean, orderNum, remarkMap, listener);
-                        }
-
-
-                        @Override
-                        public void onError(Response response, int errorCode, Exception e) {
-                            listener.onFail(errorCode, e);
-                        }
-                    });
-        }
-        if (payType.equals("zfb")) {
-            HttpUtils.getInstance().PostOdOrder(1, goodId, 0, 2
-                    , new BaseCallback<ApliyBean>() {
-                        @Override
-                        public void onRequestBefore() {
-
-                        }
-
-                        @Override
-                        public void onFailure(Request request, Exception e) {
-                            listener.onFail(165, e);
-                        }
-
-                        @Override
-                        public void onSuccess(Response response, ApliyBean apliyBean) {
-                            PayUtils.getPay(mactivity).goPay(apliyBean, orderNum, remarkMap, listener);
-                        }
-
-
-                        @Override
-                        public void onError(Response response, int errorCode, Exception e) {
-                            listener.onFail(errorCode, e);
-                        }
-                    });
-        }
     }
 
     private void updateData(UpdateDataListener dataListener) {

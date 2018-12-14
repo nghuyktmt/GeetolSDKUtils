@@ -7,7 +7,7 @@ import java.io.Serializable;
  * Introduce： 支付新接口回调实体类
  * Date     ： 2018/9/7
  */
-public class OdResultBean implements Serializable{
+public class OdResultBean implements Serializable {
 
     /**
      * appid : wx01c61151a96421a7
@@ -22,6 +22,7 @@ public class OdResultBean implements Serializable{
      * prepayid : wx28094229306750ba5586a6d63436360427
      * issucc : true
      * msg :
+     * no :
      * code :
      */
 
@@ -55,6 +56,15 @@ public class OdResultBean implements Serializable{
     private boolean issucc;
     private String msg;
     private String code;
+    private String no;
+
+    public String getNo() {
+        return no;
+    }
+
+    public void setNo(String no) {
+        this.no = no;
+    }
 
     public String getAppid() {
         return appid;
@@ -177,6 +187,7 @@ public class OdResultBean implements Serializable{
                 ", issucc=" + issucc +
                 ", msg='" + msg + '\'' +
                 ", code='" + code + '\'' +
+                ", no='" + no + '\'' +
                 '}';
     }
 }

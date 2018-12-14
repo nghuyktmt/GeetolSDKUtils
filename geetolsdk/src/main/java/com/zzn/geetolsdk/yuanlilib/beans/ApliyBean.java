@@ -15,6 +15,27 @@ public class ApliyBean implements Serializable {
     private String appid;
     private float amount;
     private String package_str;
+    //    这个是商品信息在原力后台获取的时候使用的
+    private String no;
+    //    这个是商品信息在集拓后台获取的时候使用的
+    private String order_no;
+
+
+    public String getOrder_no() {
+        return order_no;
+    }
+
+    public void setOrder_no(String order_no) {
+        this.order_no = order_no;
+    }
+
+    public String getNo() {
+        return no;
+    }
+
+    public void setNo(String no) {
+        this.no = no;
+    }
 
     public boolean isIssucc() {
         return issucc;
@@ -73,6 +94,8 @@ public class ApliyBean implements Serializable {
                 ", appid='" + appid + '\'' +
                 ", amount=" + amount +
                 ", package_str='" + package_str + '\'' +
+                ", no='" + no + '\'' +
+                ", order_no='" + order_no + '\'' +
                 '}';
     }
 }

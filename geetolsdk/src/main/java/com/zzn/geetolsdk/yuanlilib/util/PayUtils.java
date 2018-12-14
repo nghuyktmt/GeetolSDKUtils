@@ -94,6 +94,8 @@ public class PayUtils {
         if (remarkMap != null && remarkMap.size() > 0)
             updataMap.putAll(remarkMap);
         updataMap.put("order_no", orderNum);
+        updataMap.put("Client_Id", SystemUtils.getClientId(mActivity));
+        updataMap.put("Version", CPResourceUtils.getString("version"));
 //        音乐相册电子相册，用的是这个接口同步，下次更新时更换接口
 //        HttpUtils.doAsk("http://101.37.76.151:8045/CoolAlbumWeChatpay/updatestate"
 

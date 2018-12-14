@@ -6,7 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.zzn.geetolsdk.yuanlilib.callback.UpdateDataListener;
+import com.zzn.geetolsdk.yuanlilib.callback.YuanliPayListener;
 import com.zzn.geetolsdk.yuanlilib.util.GeetolUtils;
+
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
                         Log.e("LogUtils", "getGoodByName" + GeetolUtils.getGoodByName("三个月VIP"));
 
 
-//                        HashMap<String, String> remarkMap = new HashMap<>();
+                        HashMap<String, String> remarkMap = new HashMap<>();
 //                        GeetolUtils.payOrder(GeetolUtils.getPidByGoodName("制作音乐相册")
 //                                , "zfb", new YuanliPayListener() {
 //                                    @Override
@@ -49,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
 //                                        Log.e("LogUtils ", "wx  onFail");
 //                                    }
 //                                });
-//                        GeetolUtils.payOrder(GeetolUtils.getPidByGoodName("一个月VIP")
+//                        GeetolUtils.payOrderGeetol(GeetolUtils.getPidByGoodName("一个月VIP")
 //                                , "zfb", "18573676330"
 //                                , new YuanliPayListener() {
 //                                    @Override
@@ -59,6 +62,73 @@ public class MainActivity extends AppCompatActivity {
 //                                    @Override
 //                                    public void onFail(int errCode, Exception e) {
 //                                        Log.e("LogUtils ", "wx  onFail");
+//                                    }
+//                                });
+//
+
+                        GeetolUtils.payOrderGeetol(GeetolUtils.getPidByGoodName("制作音乐相册"),"zfb"
+                                ,"13888888888", new YuanliPayListener() {
+                                    @Override
+                                    public void onSuccess() {
+
+                                    }
+
+                                    @Override
+                                    public void onFail(int errCode, Exception e) {
+
+                                    }
+                                });
+
+//                        GeetolUtils.payOrderYuanli("制作音乐相册", "zfb"
+//                                , "8.8","13888888888", new YuanliPayListener() {
+//                                    @Override
+//                                    public void onSuccess() {
+//
+//                                    }
+//
+//                                    @Override
+//                                    public void onFail(int errCode, Exception e) {
+//
+//                                    }
+//                                });
+//
+//                        GeetolUtils.payOrderYuanli("制作音乐相册", "zfb"
+//                                , "8.8", remarkMap, new YuanliPayListener() {
+//                                    @Override
+//                                    public void onSuccess() {
+//
+//                                    }
+//
+//                                    @Override
+//                                    public void onFail(int errCode, Exception e) {
+//
+//                                    }
+//                                });
+//
+//                        GeetolUtils.payOrderYuanli("一个月VIP", "zfb"
+//                                , "13888888888", "8.8"
+//                                , new YuanliPayListener() {
+//                                    @Override
+//                                    public void onSuccess() {
+//
+//                                    }
+//
+//                                    @Override
+//                                    public void onFail(int errCode, Exception e) {
+//
+//                                    }
+//                                });
+//                        GeetolUtils.payOrderYuanli("一个月VIP", "zfb"
+//                                , "13888888888", "8.8", remarkMap
+//                                , new YuanliPayListener() {
+//                                    @Override
+//                                    public void onSuccess() {
+//
+//                                    }
+//
+//                                    @Override
+//                                    public void onFail(int errCode, Exception e) {
+//
 //                                    }
 //                                });
 //                        GeetolUtils.payOrder(GeetolUtils.getPidByGoodName("一个月VIP")

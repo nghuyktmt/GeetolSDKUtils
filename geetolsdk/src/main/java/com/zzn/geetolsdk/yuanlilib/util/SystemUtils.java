@@ -1,10 +1,13 @@
 package com.zzn.geetolsdk.yuanlilib.util;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
@@ -12,11 +15,13 @@ import com.zzn.geetolsdk.yuanlilib.contants.Contants;
 
 import java.util.Locale;
 
+import static android.content.Context.TELEPHONY_SERVICE;
+
 /**
  * Created by cheng
  * PackageName APP_Lock
  * 2018/1/22 10:06
- *      系统工具类
+ * 系统工具类
  */
 
 public class SystemUtils {
@@ -48,7 +53,13 @@ public class SystemUtils {
         return android.os.Build.VERSION.RELEASE;
     }
 
-    public static int getSystemVersionCode(Context context){
+    @SuppressLint("MissingPermission")
+    public static String getClientId(Activity activity) {
+        TelephonyManager TelephonyMgr = (TelephonyManager) activity.getSystemService(TELEPHONY_SERVICE);
+        return TelephonyMgr.getDeviceId();
+    }
+
+    public static int getSystemVersionCode(Context context) {
         PackageManager manager = context.getPackageManager();
         int code = 0;
         try {
@@ -80,10 +91,11 @@ public class SystemUtils {
 
     /**
      * 获取手机屏幕宽度
+     *
      * @param context
      * @return
      */
-    public static int getWith(Context context){
+    public static int getWith(Context context) {
         DisplayMetrics dm = new DisplayMetrics();
         WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         manager.getDefaultDisplay().getMetrics(dm);
@@ -92,10 +104,11 @@ public class SystemUtils {
 
     /**
      * 获取手机屏幕高度
+     *
      * @param context
      * @return
      */
-    public static int getHeight(Context context){
+    public static int getHeight(Context context) {
         DisplayMetrics dm = new DisplayMetrics();
         WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         manager.getDefaultDisplay().getMetrics(dm);
@@ -104,26 +117,27 @@ public class SystemUtils {
 
     /**
      * 获取渠道信息
+     *
      * @param context
      * @return
      */
-    public static String getChannelInfo(Context context){
+    public static String getChannelInfo(Context context) {
 
         ApplicationInfo applicationInfo = null;
         try {
             applicationInfo = context.getPackageManager().getApplicationInfo(context.getPackageName(),
                     PackageManager.GET_META_DATA);
-            if (applicationInfo==null){
+            if (applicationInfo == null) {
                 return Contants.CHANNEL_DEFAULT;
             }
             Bundle bundle = applicationInfo.metaData;
-            if (bundle == null){
+            if (bundle == null) {
                 return Contants.CHANNEL_DEFAULT;
             }
             String s = bundle.getString(Contants.CHANNEL);
-            if (Utils.isEmpty(s)){
+            if (Utils.isEmpty(s)) {
                 return Contants.CHANNEL_DEFAULT;
-            }else {
+            } else {
                 return s;
             }
         } catch (PackageManager.NameNotFoundException e) {
