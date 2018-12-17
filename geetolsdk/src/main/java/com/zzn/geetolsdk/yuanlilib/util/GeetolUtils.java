@@ -247,6 +247,8 @@ public class GeetolUtils {
         }
     }
 
+    private static int askCount = 0;
+
     private static void payYuanli(String goodTitle, String payType, String orderNum, String phoneNum
             , Object obj, String price, HashMap<String, String> prepearRemarkMap,
                                   HashMap<String, String> updateRemarkMap, YuanliPayListener listener) {
@@ -261,22 +263,40 @@ public class GeetolUtils {
         }
 
 
-        yuanliMap.put("user_phone", phoneNum);
-        yuanliMap.put("pay_type", pay_type);
-        yuanliMap.put("price", price);
+//        yuanliMap.put("user_phone", phoneNum);
+//        yuanliMap.put("pay_type", pay_type);
+//        yuanliMap.put("price", price);
         yuanliMap.put("Version", CPResourceUtils.getString("version"));
-        yuanliMap.put("order_no", orderNum);
-        yuanliMap.put("Client_Id", SystemUtils.getClientId(mactivity));
-        yuanliMap.put("app_name", CPResourceUtils.getString("yuanli_app_name"));
-        yuanliMap.put("commodity", (goodTitle.contains("VIP")) ? "开通VIP" : goodTitle);
+//        yuanliMap.put("order_no", orderNum);
+//        yuanliMap.put("Client_Id", SystemUtils.getClientId(mactivity));
+//        yuanliMap.put("app_name", CPResourceUtils.getString("yuanli_app_name"));
+//        yuanliMap.put("commodity", (goodTitle.contains("VIP")) ? "开通VIP" : goodTitle);
         if (prepearRemarkMap != null && prepearRemarkMap.size() > 0)
             yuanliMap.putAll(prepearRemarkMap);
+
         HttpUtils.doAsk("http://101.37.76.151:8045/NewOrder/PreOrder"
                 , Utils.getStringByMap(yuanliMap), new HttpUtils.HttpListener() {
                     @Override
                     public void success(String result) {
-                        mactivity.runOnUiThread(() -> PayUtils.getPay(mactivity).goPay(obj, orderNum
-                                , updateRemarkMap, listener));
+                        try {
+                            JSONObject object = new JSONObject(result);
+                            if (object.getString("code") == null
+                                    || object.getString("code").equals("")
+                                    || object.getString("code").equals("0")) {
+                                askCount++;
+                                if (askCount >= 4) {
+                                    listener.onFail(500, null);
+                                    return;
+                                }
+                                payYuanli(goodTitle, payType, orderNum, phoneNum, obj
+                                        , price, prepearRemarkMap, updateRemarkMap, listener);
+                            } else if (object.getString("code").equals("1")) {
+                                mactivity.runOnUiThread(() -> PayUtils.getPay(mactivity).goPay(obj, orderNum
+                                        , updateRemarkMap, listener));
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
 
                     @Override
@@ -311,16 +331,26 @@ public class GeetolUtils {
         yuanliMap.put("commodity", (commodity.contains("VIP")) ? "开通VIP" : commodity);
         if (prepearRemarkMap != null && prepearRemarkMap.size() > 0)
             yuanliMap.putAll(prepearRemarkMap);
-        Log.e("LogUtils", Utils.getStringByMap(yuanliMap));
         HttpUtils.doAsk("http://101.37.76.151:8045/NewOrder/PreOrder"
                 , Utils.getStringByMap(yuanliMap), new HttpUtils.HttpListener() {
                     @Override
                     public void success(String result) {
-                        Log.e("LogUtils", result);
-                        Log.e("LogUtils", (result == null) + "");
+                        try {
+                            JSONObject object = new JSONObject(result);
+                            if (object.getString("code") == null
+                                    || object.getString("code").equals("")
+                                    || object.getString("code").equals("0")) {
+                                payGeetol(goodId, payType, orderNum, phoneNum
+                                        , obj, prepearRemarkMap
+                                        , updateRemarkMap, listener);
+                            } else if (object.getString("code").equals("1")) {
+                                mactivity.runOnUiThread(() -> PayUtils.getPay(mactivity)
+                                        .goPay(obj, orderNum, updateRemarkMap, listener));
+                            }
 
-                        mactivity.runOnUiThread(() -> PayUtils.getPay(mactivity)
-                                .goPay(obj, orderNum, updateRemarkMap, listener));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
 
                     @Override

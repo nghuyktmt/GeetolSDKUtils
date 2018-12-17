@@ -67,18 +67,18 @@ public class MainActivity extends AppCompatActivity {
 //                                });
 //
 
-                        GeetolUtils.payOrderGeetol(GeetolUtils.getPidByGoodName("制作音乐相册"), "zfb"
-                                , "13555558888", new YuanliPayListener() {
-                                    @Override
-                                    public void onSuccess() {
-
-                                    }
-
-                                    @Override
-                                    public void onFail(int errCode, Exception e) {
-
-                                    }
-                                });
+//                        GeetolUtils.payOrderGeetol(GeetolUtils.getPidByGoodName("制作音乐相册"), "zfb"
+//                                , "13555558888", new YuanliPayListener() {
+//                                    @Override
+//                                    public void onSuccess() {
+//
+//                                    }
+//
+//                                    @Override
+//                                    public void onFail(int errCode, Exception e) {
+//
+//                                    }
+//                                });
 
 //                        GeetolUtils.payOrderYuanli("制作音乐相册", "zfb"
 //                                , "8.8","13888888888", new YuanliPayListener() {
