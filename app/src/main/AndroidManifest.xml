@@ -28,6 +28,8 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".Main2Activity" />
+
         <provider
             android:name="com.zzn.geetolsdk.yuanlilib.widget.GeetolProvider"
             android:authorities="${applicationId}.Geetolprovider"

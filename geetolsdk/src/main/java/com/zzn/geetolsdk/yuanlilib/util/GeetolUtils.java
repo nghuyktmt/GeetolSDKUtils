@@ -121,7 +121,7 @@ public class GeetolUtils {
                         @Override
                         public void onSuccess(Response response, OdResultBean odResultBean) {
                             Log.e("odResultBean   ", odResultBean.toString());
-                            String orderNo = odResultBean.getNo();
+                            String orderNo = odResultBean.getOrder_no();
                             payGeetol(goodId, payType, orderNo, phoneNum, odResultBean, prepareRemarkMap
                                     , updateRemarkMap, listener);
 
@@ -510,7 +510,7 @@ public class GeetolUtils {
                 });
     }
 
-    private void requestPermission(String permissionName) {
+    public static void requestPermission(String permissionName) {
         if (ContextCompat.checkSelfPermission(mactivity,
                 permissionName) != PackageManager.PERMISSION_GRANTED) { //表示未授权时
             //进行授权
