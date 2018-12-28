@@ -24,6 +24,7 @@ import com.zzn.geetolsdk.yuanlilib.beans.GetNewBean;
 import com.zzn.geetolsdk.yuanlilib.beans.Good;
 import com.zzn.geetolsdk.yuanlilib.beans.OdResultBean;
 import com.zzn.geetolsdk.yuanlilib.beans.ResultBean;
+import com.zzn.geetolsdk.yuanlilib.beans.Swt;
 import com.zzn.geetolsdk.yuanlilib.beans.UpdateBean;
 import com.zzn.geetolsdk.yuanlilib.callback.BaseCallback;
 import com.zzn.geetolsdk.yuanlilib.callback.UpdateDataListener;
@@ -403,6 +404,8 @@ public class GeetolUtils {
                 }
                 SpUtils.getInstance().putString("good", gson.toJson(goods));
 
+                SpUtils.getInstance().putString("swt", gson.toJson( updateBean.getSwt()));
+
                 String contact = gson.toJson(updateBean.getContract());
                 String hpUrl = updateBean.getHpurl();
                 SpUtils.getInstance().putString("contact", contact);
@@ -600,6 +603,20 @@ public class GeetolUtils {
             e.printStackTrace();
         }
         return goods;
+    }
+
+    public static ArrayList<Swt> getSwts() {
+        ArrayList<Swt> swts = new ArrayList<>();
+        try {
+            JSONArray array = new JSONArray(SpUtils.getInstance().getString("swt"));
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject object = array.getJSONObject(i);
+                swts.add(gson.fromJson(object.toString(), Swt.class));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return swts;
     }
 
     public static Contract getContact() {

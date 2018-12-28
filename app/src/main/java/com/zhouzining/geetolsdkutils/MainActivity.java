@@ -31,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
                 Log.e("LogUtils", "startSDKSuccess  ");
                 Intent intent = new Intent(MainActivity.this, Main2Activity.class);
                 startActivity(intent);
+
+                Log.e("LogUtils","swts  "+GeetolUtils.getSwts().toString());
             }
 
             @Override
