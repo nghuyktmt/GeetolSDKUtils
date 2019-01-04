@@ -206,6 +206,8 @@ public class GeetolUtils {
                         public void onSuccess(Response response, OdResultBean odResultBean) {
                             Log.e("odResultBean   ", odResultBean.toString());
                             String orderNo = odResultBean.getNo();
+                            if (orderNo == null || orderNo.equals("") || orderNo.equals("null"))
+                                orderNo = odResultBean.getNo();
                             payYuanli(goodTitle, payType, orderNo, phoneNum, odResultBean
                                     , price, prepearRemarkMap, updateRemarkMap, listener);
 
@@ -236,7 +238,8 @@ public class GeetolUtils {
                         public void onSuccess(Response response, ApliyBean apliyBean) {
                             String orderNo = apliyBean.getNo();
                             Log.e("apliyBean   ", apliyBean.toString());
-
+                            if (orderNo == null || orderNo.equals("") || orderNo.equals("null"))
+                                orderNo = apliyBean.getNo();
                             payYuanli(goodTitle, payType, orderNo, phoneNum, apliyBean
                                     , price, prepearRemarkMap, updateRemarkMap, listener);
                         }
@@ -265,14 +268,14 @@ public class GeetolUtils {
         }
 
 
-//        yuanliMap.put("user_phone", phoneNum);
-//        yuanliMap.put("pay_type", pay_type);
-//        yuanliMap.put("price", price);
+        yuanliMap.put("user_phone", phoneNum);
+        yuanliMap.put("pay_type", pay_type);
+        yuanliMap.put("price", price);
         yuanliMap.put("Version", CPResourceUtils.getString("version"));
-//        yuanliMap.put("order_no", orderNum);
-//        yuanliMap.put("Client_Id", SystemUtils.getClientId(mactivity));
-//        yuanliMap.put("app_name", CPResourceUtils.getString("yuanli_app_name"));
-//        yuanliMap.put("commodity", (goodTitle.contains("VIP")) ? "开通VIP" : goodTitle);
+        yuanliMap.put("order_no", orderNum);
+        yuanliMap.put("Client_Id", SystemUtils.getClientId(mactivity));
+        yuanliMap.put("app_name", CPResourceUtils.getString("yuanli_app_name"));
+        yuanliMap.put("commodity", (goodTitle.contains("VIP")) ? "开通VIP" : goodTitle);
         if (prepearRemarkMap != null && prepearRemarkMap.size() > 0)
             yuanliMap.putAll(prepearRemarkMap);
 
