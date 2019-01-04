@@ -1,6 +1,5 @@
 package com.zhouzining.geetolsdkutils;
 
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,6 +11,7 @@ import android.util.Log;
 import com.zzn.geetolsdk.yuanlilib.beans.ResultBean;
 import com.zzn.geetolsdk.yuanlilib.callback.BaseCallback;
 import com.zzn.geetolsdk.yuanlilib.callback.UpdateDataListener;
+import com.zzn.geetolsdk.yuanlilib.callback.YuanliPayListener;
 import com.zzn.geetolsdk.yuanlilib.util.GeetolUtils;
 import com.zzn.geetolsdk.yuanlilib.util.ToastUtils;
 
@@ -29,10 +29,21 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess() {
                 Log.e("LogUtils", "startSDKSuccess  ");
-                Intent intent = new Intent(MainActivity.this, Main2Activity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(MainActivity.this, Main2Activity.class);
+//                startActivity(intent);
+                GeetolUtils.payOrderGeetol(GeetolUtils.getPidByGoodName(
+                        "解锁大吉名" ), "zfb", new YuanliPayListener() {
+                    @Override
+                    public void onSuccess() {
+                        Log.e("LogUtils", "onSuccess  " );
+                    }
 
-                Log.e("LogUtils","swts  "+GeetolUtils.getSwts().toString());
+                    @Override
+                    public void onFail(int i, Exception e) {
+
+                    }
+                });
+
             }
 
             @Override

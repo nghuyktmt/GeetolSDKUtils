@@ -12,7 +12,7 @@ public interface API {
     /**
      * 通用接口
      */
-    public static String COMMON_URL = "http://apyl.wm002.cn/app/";//正式接口
+    public static String COMMON_URL = "http://app.wm002.cn/app/";//正式接口
 //      public static String COMMON_URL = "http://pay.wm002.cn/app/";//测试接口
 
     /**

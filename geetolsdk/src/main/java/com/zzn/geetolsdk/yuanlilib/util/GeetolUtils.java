@@ -123,6 +123,8 @@ public class GeetolUtils {
                         public void onSuccess(Response response, OdResultBean odResultBean) {
                             Log.e("odResultBean   ", odResultBean.toString());
                             String orderNo = odResultBean.getOrder_no();
+                            if (orderNo == null || orderNo.equals("") || orderNo.equals("null"))
+                                orderNo = odResultBean.getNo();
                             payGeetol(goodId, payType, orderNo, phoneNum, odResultBean, prepareRemarkMap
                                     , updateRemarkMap, listener);
 
@@ -151,9 +153,8 @@ public class GeetolUtils {
                         @Override
                         public void onSuccess(Response response, ApliyBean apliyBean) {
                             String orderNo = apliyBean.getOrder_no();
-
-                            Log.e("apliyBean   ", apliyBean.toString());
-
+                            if (orderNo == null || orderNo.equals("") || orderNo.equals("null"))
+                                orderNo = apliyBean.getNo();
                             payGeetol(goodId, payType, orderNo, phoneNum, apliyBean, prepareRemarkMap
                                     , updateRemarkMap, listener);
 
@@ -404,7 +405,7 @@ public class GeetolUtils {
                 }
                 SpUtils.getInstance().putString("good", gson.toJson(goods));
 
-                SpUtils.getInstance().putString("swt", gson.toJson( updateBean.getSwt()));
+                SpUtils.getInstance().putString("swt", gson.toJson(updateBean.getSwt()));
 
                 String contact = gson.toJson(updateBean.getContract());
                 String hpUrl = updateBean.getHpurl();

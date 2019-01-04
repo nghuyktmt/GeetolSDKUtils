@@ -3,17 +3,18 @@ package com.zzn.geetolsdk.yuanlilib.util;
 import android.app.Activity;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 import com.alipay.sdk.app.PayTask;
 import com.google.gson.Gson;
+import com.tencent.mm.opensdk.modelbase.BaseResp;
+import com.tencent.mm.opensdk.modelpay.PayReq;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.zzn.geetolsdk.yuanlilib.beans.AliResultBean;
 import com.zzn.geetolsdk.yuanlilib.beans.ApliyBean;
 import com.zzn.geetolsdk.yuanlilib.beans.OdResultBean;
 import com.zzn.geetolsdk.yuanlilib.callback.YuanliPayListener;
 import com.zzn.geetolsdk.yuanlilib.http.HttpUtils;
-import com.tencent.mm.opensdk.modelbase.BaseResp;
-import com.tencent.mm.opensdk.modelpay.PayReq;
-import com.tencent.mm.opensdk.openapi.IWXAPI;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -104,6 +105,7 @@ public class PayUtils {
                 , Utils.getStringByMap(updataMap), new HttpUtils.HttpListener() {
                     @Override
                     public void success(String result) {
+                        Log.e("LogUtils", "result  " +result);
                         listener.onSuccess();
                     }
 
