@@ -31,7 +31,20 @@ public class MainActivity extends AppCompatActivity {
                 Log.e("LogUtils", "startSDKSuccess  ");
 //                Intent intent = new Intent(MainActivity.this, Main2Activity.class);
 //                startActivity(intent);
-                GeetolUtils.payOrderYuanli("文字转语音", "zfb", "0.1", new YuanliPayListener() {
+
+                GeetolUtils.payOrderYuanli("解锁大吉名", "wx", "16.88", new YuanliPayListener() {
+                    @Override
+                    public void onSuccess() {
+
+                    }
+
+                    @Override
+                    public void onFail(int errCode, Exception e) {
+
+                    }
+                });
+                GeetolUtils.payOrderGeetol(GeetolUtils.getPidByGoodName(
+                        "解锁大吉名" ), "wx", new YuanliPayListener() {
                     @Override
                     public void onSuccess() {
                         Log.e("LogUtils", "onSuccess  ");

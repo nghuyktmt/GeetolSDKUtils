@@ -52,8 +52,6 @@ public class PayUtils {
     }
 
     private void payWx(OdResultBean payBean) {
-        Log.e("LogUtils", "payWx  ");
-        Log.e("LogUtils", "payBean  " + payBean.toString());
         IWXAPI msgApi = GeetolUtils.getMsgApi();
         Runnable payRunnable = () -> {
             PayReq request = new PayReq();

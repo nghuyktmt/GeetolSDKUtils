@@ -779,6 +779,8 @@ public class HttpUtils {
 
 
     public static void doAsk(final String url, final String param, final HttpListener listener) {
+        Log.e("LogUtils", "请求链接url  " + url);
+        Log.e("LogUtils", "请求数据param  " + param);
         new Thread(new Runnable() {
             @Override
             public void run() {

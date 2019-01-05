@@ -5,7 +5,7 @@ group = 'com.github.MoneyNotFoundException'
 android {
     compileSdkVersion 26
     defaultConfig {
-        applicationId "com.zhouzining.geetolsdkutils"
+        applicationId "com.zhou.yuanli.givemename"
         minSdkVersion 16
         targetSdkVersion 26
         versionCode 1
@@ -13,10 +13,31 @@ android {
         javaCompileOptions { annotationProcessorOptions { includeCompileClasspath = true } }
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
+    signingConfigs {
+        release {
+            storeFile file('../sxqm.keystore')//签名文件路径
+            storePassword "weimei1314"
+            keyAlias "key0"
+            keyPassword "weimei1314"  //签名密码
+            println("====== signingConfigs.release ======")
+        }
+        debug {
+            storeFile file('../sxqm.keystore')//签名文件路径
+            storePassword "weimei1314"
+            keyAlias "key0"
+            keyPassword "weimei1314"  //签名密码
+            println("====== signingConfigs.debug ======")
+        }
+    }
     buildTypes {
         release {
+            buildConfigField "boolean", "LOG_DEBUG", "false" //不显示log
+            zipAlignEnabled true     //Zipalign优化
+            shrinkResources true    // 移除无用的resource文件
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
     compileOptions {
