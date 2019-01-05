@@ -7,15 +7,12 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
 import com.zzn.geetolsdk.yuanlilib.contants.Contants;
 
 import java.util.Locale;
-
-import static android.content.Context.TELEPHONY_SERVICE;
 
 /**
  * Created by cheng
@@ -55,8 +52,9 @@ public class SystemUtils {
 
     @SuppressLint("MissingPermission")
     public static String getClientId(Activity activity) {
-        TelephonyManager TelephonyMgr = (TelephonyManager) activity.getSystemService(TELEPHONY_SERVICE);
-        return TelephonyMgr.getDeviceId();
+//        TelephonyManager TelephonyMgr = (TelephonyManager) activity.getSystemService(TELEPHONY_SERVICE);
+//        return TelephonyMgr.getDeviceId();
+        return Utils.getDevice(activity);
     }
 
     public static int getSystemVersionCode(Context context) {

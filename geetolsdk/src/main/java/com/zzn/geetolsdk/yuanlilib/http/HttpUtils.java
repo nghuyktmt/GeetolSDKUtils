@@ -7,12 +7,16 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import com.zzn.geetolsdk.yuanlilib.NotRegisterException;
 import com.zzn.geetolsdk.yuanlilib.callback.BaseCallback;
 import com.zzn.geetolsdk.yuanlilib.callback.DataCallBack;
 import com.zzn.geetolsdk.yuanlilib.contants.API;
 import com.zzn.geetolsdk.yuanlilib.util.CPResourceUtils;
 import com.zzn.geetolsdk.yuanlilib.util.MapUtils;
 import com.zzn.geetolsdk.yuanlilib.util.Utils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -659,6 +663,20 @@ public class HttpUtils {
                     //返回成功回调
                     String result = response.body().string();
                     Log.e("请求数据：", result);
+
+                    try {
+                        JSONObject jsonObject = new JSONObject(result);
+                        String msg = jsonObject.getString("msg");
+                        if (msg != null && msg.contains("设备未注册")) {
+                            NotRegisterException e = new NotRegisterException("设备未注册");
+                            callbackFailure(call.request(), callback, e);
+                            return;
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+
                     if (callback.mType == String.class) {
                         //如果我们需要返回String类型
                         callbackSuccess(response, result, callback);

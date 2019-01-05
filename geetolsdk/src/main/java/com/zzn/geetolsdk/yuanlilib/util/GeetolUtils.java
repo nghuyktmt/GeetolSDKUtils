@@ -81,8 +81,9 @@ public class GeetolUtils {
     public void startSDK(String channelName
             , UpdateDataListener dataListener) {
         gson = new Gson();
+        requestPermission(new String[]{Manifest.permission.READ_PHONE_STATE
+                , Manifest.permission.WRITE_SETTINGS});
         if (SpUtils.getInstance().getBoolean("isFirst", true)) {
-            requestPermission(Manifest.permission.READ_PHONE_STATE);
             channelStatistics(CPResourceUtils.getString("yuanli_app_name"), channelName);
             SpUtils.getInstance().putBoolean("isFirst", false);
         }
@@ -376,7 +377,11 @@ public class GeetolUtils {
             @Override
             public void onFailure(Request request, Exception e) {
                 ToastUtils.showShortToast("数据更新失败");
-                dataListener.onFail(192, e);
+                if (e.getMessage().equals("设备未注册")){
+                    requestPermission(new String[]{Manifest.permission.READ_PHONE_STATE
+                            , Manifest.permission.WRITE_SETTINGS});
+                }
+                updateData(dataListener);
             }
 
             @Override
@@ -437,6 +442,11 @@ public class GeetolUtils {
             @Override
             public void onFailure(Request request, Exception e) {
                 ToastUtils.showShortToast("新版本检测失败");
+                if (e.getMessage().equals("设备未注册")){
+                    requestPermission(new String[]{Manifest.permission.READ_PHONE_STATE
+                            , Manifest.permission.WRITE_SETTINGS});
+                    checkVersion();
+                }
             }
 
             @Override
@@ -518,12 +528,17 @@ public class GeetolUtils {
                 });
     }
 
-    public static void requestPermission(String permissionName) {
-        if (ContextCompat.checkSelfPermission(mactivity,
-                permissionName) != PackageManager.PERMISSION_GRANTED) { //表示未授权时
-            //进行授权
-            ActivityCompat.requestPermissions(mactivity, new String[]{permissionName}, 1);
-        } else {
+    public static void requestPermission(String[] permissionName) {
+        boolean isOk = true;
+        for (int i = 0; i < permissionName.length; i++) {
+            if (ContextCompat.checkSelfPermission(mactivity,
+                    permissionName[i]) != PackageManager.PERMISSION_GRANTED) { //表示未授权时
+                isOk = false;
+            }
+        }
+        if (isOk)
+            ActivityCompat.requestPermissions(mactivity, permissionName, 1);
+        else {
             com.zzn.geetolsdk.yuanlilib.http.HttpUtils.getInstance().postRegister(
                     new BaseCallback<ResultBean>() {
                         @Override
