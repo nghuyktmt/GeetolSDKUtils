@@ -128,7 +128,7 @@ public class PayUtils {
                 AliResultBean ali = gson.fromJson(result.get("result"), AliResultBean.class);
                 if (ali.getAlipay_trade_app_pay_response().getCode().equals("9000")
                         || ali.getAlipay_trade_app_pay_response().getCode().equals("10000")) {
-//                    synchroData();
+                    synchroData();
                 } else {
                     listener.onFail(Integer.parseInt(ali.getAlipay_trade_app_pay_response().getCode())
                             , null);

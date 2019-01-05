@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
                 GeetolUtils.payOrderYuanli("解锁大吉名", "wx", "16.88", new YuanliPayListener() {
                     @Override
                     public void onSuccess() {
-
+                        Log.e("LogUtils", "payOrderYuanli   onSuccess  ");
                     }
 
                     @Override
@@ -43,19 +43,19 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                 });
-                GeetolUtils.payOrderGeetol(GeetolUtils.getPidByGoodName(
-                        "解锁大吉名" ), "wx", new YuanliPayListener() {
-                    @Override
-                    public void onSuccess() {
-                        Log.e("LogUtils", "onSuccess  ");
-
-                    }
-
-                    @Override
-                    public void onFail(int i, Exception e) {
-
-                    }
-                });
+//                GeetolUtils.payOrderGeetol(GeetolUtils.getPidByGoodName(
+//                        "解锁大吉名"), "wx", new YuanliPayListener() {
+//                    @Override
+//                    public void onSuccess() {
+//                        Log.e("LogUtils", "payOrderGeetol   onSuccess  ");
+//
+//                    }
+//
+//                    @Override
+//                    public void onFail(int i, Exception e) {
+//
+//                    }
+//                });
             }
 
             @Override

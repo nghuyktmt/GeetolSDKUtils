@@ -152,6 +152,7 @@ public class GeetolUtils {
 
                         @Override
                         public void onSuccess(Response response, ApliyBean apliyBean) {
+                            Log.e("apliyBean   ", apliyBean.toString());
                             String orderNo = apliyBean.getOrder_no();
                             if (orderNo == null || orderNo.equals("") || orderNo.equals("null"))
                                 orderNo = apliyBean.getNo();
